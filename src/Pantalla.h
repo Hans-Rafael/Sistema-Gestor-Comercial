@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Producto.h"
+#include "CajaService.h"
 using namespace std;
 
 // codigos de color ANSI
@@ -18,5 +19,7 @@ string conColor(const string& texto, const string& color);
 void pantallaVenta(Producto lista[], int cantidad);
 void pantallaCompra(Producto lista[], int cantidad);
 void pantallaAlertas(Producto lista[], int cantidad);
+void pantallaMovimientosCaja(EstadoCaja& caja); // opcion 4
+void pantallaCierreCaja(EstadoCaja& caja); // opcion 5
 
 #endif

@@ -5,7 +5,7 @@
 using namespace std;
 
 struct Lote {
-    string fechaVencimiento; // "AAAA-MM-DD"
+    string fechaVencimiento; // "DD-MM-AAAA"
     int cantidad; // unidades que quedan en este lote
 };
 

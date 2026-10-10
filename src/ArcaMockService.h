@@ -7,8 +7,8 @@ using namespace std;
 // 14 digitos al azar (srand se llama una sola vez en main)
 string generarCAESimulado();
 
-// una linea de texto con tipo, numero, total y CAE(Código de Autorización Electrónico.)
-//"Es un número de 14 dígitos que ARCA (ex AFIP) asigna a cada factura electrónica cuando la autoriza."
+// una linea de texto con tipo, numero, total y CAE
+// CAE = Codigo de Autorizacion Electronico: numero de 14 digitos que ARCA asigna a cada factura
 string generarTextoQR(char tipoFactura, int numero, double total, const string& cae);
 
 #endif
