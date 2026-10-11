@@ -17,6 +17,12 @@ public:
 
     // "VENCIDO", "CRITICO", "ADVERTENCIA" o "VIGENTE" (para mostrar en pantalla)
     string nombreEstado(int estado);
+
+    // STOCK: 0 a 10 unidades | CRITICO: 11 a 20 | ADVERTENCIA: 21 a 30 | VIGENTE: mas de 30
+    int estadoStock(int stock);
+    
+    // "STOCK", "CRITICO", "ADVERTENCIA" o "VIGENTE" (para mostrar en pantalla)
+    string nombreEstadoStock(int estado);
 };
 
 #endif
