@@ -20,6 +20,14 @@ make clean  # borra los archivos generados
 
 Hay que tener `g++` instalado. Los warnings cuentan como errores a corregir (`-Wall -Wextra`).
 
+## Reglas del proyecto
+
+- Codigo con **clases** (POO): atributos privados, constructores, getters/setters, herencia con `virtual` y `new`/`delete`.
+- Solo librerias vistas en clase: `<iostream>`, `<cstdlib>`, `<fstream>`, `<random>`.
+- Sin `struct`, `enum`, `nullptr`, `const T&`, `try/catch` ni `<ctime>`.
+- Al iniciar el programa pide la fecha de hoy (DD-MM-AAAA).
+- Usuarios de prueba: `encargado` / `1234` y `cajero` / `1234`.
+
 ## Pendientes
 
 Para ver que falta implementar: `grep -rn TODO src`

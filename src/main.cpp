@@ -1,17 +1,12 @@
 // Autor: Integrante 5
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
-#include "Producto.h"
+#include "Inventario.h"
+#include "Auth.h"
+#include "Caja.h"
 #include "DatosPrueba.h"
 #include "Validaciones.h"
 #include "Pantalla.h"
-#include "Usuario.h"
-#include "AuthService.h"
-#include "CajaService.h"
-#include "InventarioService.h"
-#include "AlertasService.h"
-#include "VentaService.h"
 #include "Fechas.h"
 using namespace std;
 
@@ -26,21 +21,30 @@ void mostrarMenu() {
 }
 
 int main() {
-    srand(time(nullptr));                              // una sola vez, para el CAE al azar
-    Producto productos[MAX_PRODUCTOS];
-    int cantProductos = cargarDatosDePrueba(productos);
-    EstadoCaja caja;
+    // no usamos <ctime>: la fecha de hoy se escribe a mano
+    string fecha = "";
+    while (fecha == "") {
+        fecha = convertirFecha(leerLinea("Fecha de hoy (DD-MM-AAAA): "));
+        if (fecha == "") cout << "Fecha invalida" << endl;
+    }
+    setFechaHoy(fecha);
 
-    // TODO (Integrante 5): login con validarLogin y apertura de caja con abrirCaja
+    Inventario inventario(CAPACIDAD_PRODUCTOS);
+    Auth auth(CAPACIDAD_USUARIOS);
+    Caja caja;
+    cargarDatosDePrueba(inventario);
+    cargarUsuariosDePrueba(auth);
+
+    // TODO (Integrante 5): login con auth.validarLogin y apertura de caja con caja.abrir
 
     int opcion;
     do {
         mostrarMenu();
         opcion = leerEntero("Opcion: ", 0, 5);
         switch (opcion) {
-            case 1: pantallaVenta(productos, cantProductos);  break;
-            case 2: pantallaCompra(productos, cantProductos); break;
-            case 3: pantallaAlertas(productos, cantProductos); break;
+            case 1: pantallaVenta(inventario, caja); break;
+            case 2: pantallaCompra(inventario); break;
+            case 3: pantallaAlertas(inventario); break;
             case 4: pantallaMovimientosCaja(caja); break;
             case 5: pantallaCierreCaja(caja); break;
             case 0: cout << "Hasta luego" << endl; break;

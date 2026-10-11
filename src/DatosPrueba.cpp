@@ -1,68 +1,36 @@
 // Autor: Integrante 1
+#include <iostream>
 #include "DatosPrueba.h"
-#include "InventarioService.h"
 #include "Fechas.h"
 using namespace std;
 
-// llena el array y devuelve cuantos productos cargo
-// NOTA: las lineas de agregarLote estan comentadas hasta que el Integrante 2 termine
-// InventarioService.cpp. Cuando llegue, descomentarlas (quitar las //).
-int cargarDatosDePrueba(Producto lista[]) {
-    int cant = 0;
+void cargarDatosDePrueba(Inventario& inv) {
+    Producto *leche = new Producto("7791234567", "Leche Entera 1L", 1000.00, 21.0, 10);
+    leche->agregarLote(fechaEnDias(-2), 5); // vencido
+    leche->agregarLote(fechaEnDias(2), 4); // critico
+    leche->agregarLote(fechaEnDias(40), 12); // vigente
+    inv.agregarProducto(leche);
 
-    Producto leche;
-    leche.codigoBarras = "7791234567";
-    leche.nombre = "Leche Entera 1L";
-    leche.precioBase = 1000.00;
-    leche.porcentajeIVA = 21.0;
-    leche.stockMinimo = 10;
-    // agregarLote(leche, fechaEnDias(-2), 5); // vencido
-    // agregarLote(leche, fechaEnDias(2), 4); // critico
-    // agregarLote(leche, fechaEnDias(40), 12); // vigente
-    lista[cant] = leche;
-    cant++;
+    Producto *pan = new Producto("7799876543", "Pan Lactal", 1500.00, 10.5, 5);
+    pan->agregarLote(fechaEnDias(6), 8); // advertencia
+    inv.agregarProducto(pan);
 
-    Producto pan;
-    pan.codigoBarras = "7799876543";
-    pan.nombre = "Pan Lactal";
-    pan.precioBase = 1500.00;
-    pan.porcentajeIVA = 10.5;
-    pan.stockMinimo = 5;
-    // agregarLote(pan, fechaEnDias(6), 8); // advertencia
-    lista[cant] = pan;
-    cant++;
+    Producto *yogur = new Producto("7795551234", "Yogur Natural 190g", 800.00, 21.0, 8);
+    yogur->agregarLote(fechaEnDias(1), 3); // critico
+    yogur->agregarLote(fechaEnDias(15), 20); // vigente
+    inv.agregarProducto(yogur);
 
-    Producto yogur;
-    yogur.codigoBarras = "7795551234";
-    yogur.nombre = "Yogur Natural 190g";
-    yogur.precioBase = 800.00;
-    yogur.porcentajeIVA = 21.0;
-    yogur.stockMinimo = 8;
-    // agregarLote(yogur, fechaEnDias(1), 3); // critico
-    // agregarLote(yogur, fechaEnDias(15), 20); // vigente
-    lista[cant] = yogur;
-    cant++;
+    Producto *arroz = new Producto("7792223344", "Arroz Largo Fino 1kg", 1200.00, 10.5, 10);
+    arroz->agregarLote(fechaEnDias(180), 30); // vigente
+    inv.agregarProducto(arroz);
 
-    Producto arroz;
-    arroz.codigoBarras = "7792223344";
-    arroz.nombre = "Arroz Largo Fino 1kg";
-    arroz.precioBase = 1200.00;
-    arroz.porcentajeIVA = 10.5;
-    arroz.stockMinimo = 10;
-    // agregarLote(arroz, fechaEnDias(180), 30); // vigente
-    lista[cant] = arroz;
-    cant++;
+    Producto *galletitas = new Producto("7793334455", "Galletitas Dulces 300g", 900.00, 21.0, 6);
+    galletitas->agregarLote(fechaEnDias(-10), 7); // vencido
+    galletitas->agregarLote(fechaEnDias(5), 10); // advertencia
+    inv.agregarProducto(galletitas);
+}
 
-    Producto galletitas;
-    galletitas.codigoBarras = "7793334455";
-    galletitas.nombre = "Galletitas Dulces 300g";
-    galletitas.precioBase = 900.00;
-    galletitas.porcentajeIVA = 21.0;
-    galletitas.stockMinimo = 6;
-    // agregarLote(galletitas, fechaEnDias(-10), 7); // vencido
-    // agregarLote(galletitas, fechaEnDias(5), 10); // advertencia
-    lista[cant] = galletitas;
-    cant++;
-
-    return cant;
+void cargarUsuariosDePrueba(Auth& auth) {
+    auth.agregarUsuario(new Encargado("encargado", "1234"));
+    auth.agregarUsuario(new Cajero("cajero", "1234"));
 }
