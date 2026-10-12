@@ -7,6 +7,7 @@
 #include "Fechas.h"
 #include "Validaciones.h"
 #include "Tipos.h"
+#include "Caja.h"
 
 using namespace std;
 
@@ -67,10 +68,10 @@ void pantallaVenta(Inventario &inventario, Caja &caja) {
         cout << f->armarTexto() << endl;
 
         if (medioPago == EFECTIVO) {
-            double pagoCon = leerDouble("Efectivo con el que paga: ", 0, 9999999.99);
+          double pagoCon = leerDouble("Efectivo con el que paga: ", 0);
             double vuelto = pagoCon - total;
             cout << "Vuelto: $" << vuelto << endl;
-            caja.agregarVentaEfectivo(total);
+            caja.registrarVentaEfectivo(total);
         }
 
         delete f;
