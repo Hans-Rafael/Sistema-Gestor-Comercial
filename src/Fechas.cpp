@@ -64,12 +64,23 @@ int diasHasta(string fecha) {
     return (int)(diasDeTexto(fecha) - diasDeTexto(fechaActual));
 }
 
+// dias que tiene el mes m del anio a (controla los bisiestos)
+int diasDelMes(int m, int a) {
+    if (m == 2) {
+        bool bisiesto = (a % 4 == 0 && a % 100 != 0) || a % 400 == 0;
+        return bisiesto ? 29 : 28;
+    }
+    if (m == 4 || m == 6 || m == 9 || m == 11) return 30;
+    return 31;
+}
+
 string convertirFecha(string ddmmaaaa) {
     if (ddmmaaaa.length() != 10) return "";
     int d = numeroEn(ddmmaaaa, 0, 2);
     int m = numeroEn(ddmmaaaa, 3, 2);
     int a = numeroEn(ddmmaaaa, 6, 4);
-    if (d < 1 || d > 31 || m < 1 || m > 12 || a < 1900) return "";
+    if (m < 1 || m > 12 || a < 1900) return "";
+    if (d < 1 || d > diasDelMes(m, a)) return "";
     if (ddmmaaaa[2] != '/' && ddmmaaaa[2] != '-') return "";
     if (ddmmaaaa[5] != '/' && ddmmaaaa[5] != '-') return "";
     return ddmmaaaa.substr(0, 2) + "-" + ddmmaaaa.substr(3, 2) + "-" + ddmmaaaa.substr(6, 4);
