@@ -28,7 +28,7 @@ public:
     bool agregarItem(Producto *p, int cantidad) {
         if (cantItems >= MAX_CARRITO) return false;
         productosCarrito[cantItems] = p;
-        cantantidadesCarrito(cantidad); // corregido abajo
+        cantidadesCarrito[cantItems] = cantidad;
         cantItems++;
         return true;
     }

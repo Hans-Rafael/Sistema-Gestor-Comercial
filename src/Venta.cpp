@@ -1,7 +1,7 @@
 #include "Venta.h"
 
 double Venta::precioConIVA(Producto *p) {
-    return p->getPrecioBase() * (1 + p->getPorcentajeIVA() / 100.0);
+    return p->precioBase * (1 + p->porcentajeIVA / 100.0);
 }
 
 char Venta::tipoComprobante() {

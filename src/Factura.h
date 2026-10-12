@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "Venta.h"
+#include "Tipos.h"
 
 using namespace std;
 
