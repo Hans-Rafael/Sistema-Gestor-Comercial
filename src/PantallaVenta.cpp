@@ -4,6 +4,7 @@
 #include "Venta.h"
 #include "ArcaMock.h"
 #include "Factura.h"
+#include "Fechas.h"
 #include "Validaciones.h"
 #include "Tipos.h"
 
@@ -69,7 +70,7 @@ void pantallaVenta(Inventario &inventario, Caja &caja) {
             double pagoCon = leerDouble("Efectivo con el que paga: ", 0, 9999999.99);
             double vuelto = pagoCon - total;
             cout << "Vuelto: $" << vuelto << endl;
-            caja.agregarVentaEfectivo(total); // Asumiendo el método correspondiente de caja
+            caja.agregarVentaEfectivo(total);
         }
 
         delete f;

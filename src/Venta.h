@@ -1,21 +1,20 @@
+// Autor: Integrante 3
 #ifndef VENTA_H
 #define VENTA_H
 
 #include <iostream>
 #include <string>
-#include "Producto.h"
 #include "Tipos.h"
+#include "Producto.h"
 
 using namespace std;
 
-const int MAX_CARRITO = 50;
-
 class Venta {
 private:
-    Producto *productosCarrito[MAX_CARRITO];
-    int cantidadesCarrito[MAX_CARRITO];
+    Producto *productos[MAX_ITEMS_CARRITO];
+    int cantidades[MAX_ITEMS_CARRITO];
     int cantItems;
-    int condicionCliente; // CONSUMIDOR_FINAL, etc.
+    int condicionCliente; // CONSUMIDOR_FINAL, RESPONSABLE_INSCRIPTO, etc.
     int medioPago;        // EFECTIVO, TARJETA, TRANSFERENCIA
 
 public:
@@ -25,28 +24,19 @@ public:
         medioPago = pago;
     }
 
-    bool agregarItem(Producto *p, int cantidad) {
-        if (cantItems >= MAX_CARRITO) return false;
-        productosCarrito[cantItems] = p;
-        cantidadesCarrito[cantItems] = cantidad;
-        cantItems++;
-        return true;
-    }
-    
-    // Método auxiliar corregido para la cantidad
-    void setCantidadItem(int i, int c) {
-        cantidadesCarrito[i] = c;
-    }
+    bool agregarItem(Producto *p, int cantidad);
 
+    void setCondicionCliente(int c) { condicionCliente = c; }
     int getCantItems() { return cantItems; }
-    Producto* getProductoItem(int i) { return productosCarrito[i]; }
-    int getCantidadItem(int i) { return cantidadesCarrito[i]; }
+    Producto* getProductoItem(int i) { return productos[i]; }
+    int getCantidadItem(int i) { return cantidades[i]; }
     int getCondicionCliente() { return condicionCliente; }
     int getMedioPago() { return medioPago; }
 
     double precioConIVA(Producto *p);
     char tipoComprobante();
-    double calcularTotal();
+    double subtotalItem(int i);
+    double total();
 };
 
 #endif

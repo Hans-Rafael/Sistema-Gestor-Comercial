@@ -4,7 +4,7 @@
 #include "Validaciones.h"
 using namespace std;
 
-int leerEntero(const string& mensaje, int minimo, int maximo) {
+int leerEntero(string mensaje, int minimo, int maximo) {
     int valor;
     while (true) {
         cout << mensaje;
@@ -19,7 +19,7 @@ int leerEntero(const string& mensaje, int minimo, int maximo) {
     }
 }
 
-double leerDouble(const string& mensaje, double minimo) {
+double leerDouble(string mensaje, double minimo) {
     double valor;
     while (true) {
         cout << mensaje;
@@ -34,7 +34,7 @@ double leerDouble(const string& mensaje, double minimo) {
     }
 }
 
-string leerLinea(const string& mensaje) {
+string leerLinea(string mensaje) {
     string texto;
     while (true) {
         cout << mensaje;
@@ -45,9 +45,14 @@ string leerLinea(const string& mensaje) {
 }
 
 void limpiarPantalla() {
-#ifdef _WIN32
+#if defined(_WIN32)
     system("cls");
 #else
     system("clear");
 #endif
+}
+
+void pausar() {
+    cout << "\nPresione Enter para continuar..." << endl;
+    cin.get();
 }

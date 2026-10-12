@@ -1,54 +1,93 @@
 // Autor: Integrante 1
-#include <ctime>
+#include <iostream>
 #include "Fechas.h"
 using namespace std;
 
-// IMPORTANTE: todas las fechas del proyecto son texto "DD-MM-AAAA".
-// No se pueden comparar con < o > (por ejemplo "05-12-2026" < "20-11-2026" daria verdadero).
-// Para comparar fechas, todos tienen que usar compararFechas().
+string fechaActual = "01-01-2026"; // se cambia con setFechaHoy
 
-// TODO (Integrante 1): devolver la fecha de hoy como "DD-MM-AAAA".
-//   1) time_t ahora = time(nullptr);
-//   2) tm* f = localtime(&ahora);  -> f->tm_year + 1900, f->tm_mon + 1, f->tm_mday
-//   3) armar el texto con to_string; si el mes o el dia es menor a 10, agregar un "0" delante.
-// Por ahora devuelve un valor fijo.
+// lee 'largo' digitos desde la posicion 'inicio'; -1 si hay algo que no es digito
+int numeroEn(string texto, int inicio, int largo) {
+    int valor = 0;
+    for (int i = inicio; i < inicio + largo; i++) {
+        if (texto[i] < '0' || texto[i] > '9') return -1;
+        valor = valor * 10 + (texto[i] - '0');
+    }
+    return valor;
+}
+
+// dias transcurridos desde el 01-01-1970 hasta la fecha (algoritmo de calendario civil)
+long diasDesdeBase(int a, int m, int d) {
+    if (m <= 2) a--;
+    long era = (a >= 0 ? a : a - 399) / 400;
+    long yoe = a - era * 400;
+    long doy = (153 * (m > 2 ? m - 3 : m + 9) + 2) / 5 + d - 1;
+    long doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    return era * 146097 + doe - 719468;
+}
+
+// pasa de dias desde 1970 a texto "DD-MM-AAAA"
+string textoDesdeDias(long z) {
+    z += 719468;
+    long era = (z >= 0 ? z : z - 146096) / 146097;
+    long doe = z - era * 146097;
+    long yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    long doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    long mp = (5 * doy + 2) / 153;
+    int d = doy - (153 * mp + 2) / 5 + 1;
+    int m = mp < 10 ? mp + 3 : mp - 9;
+    int a = yoe + era * 400 + (m <= 2 ? 1 : 0);
+
+    string dd = to_string(d);
+    string mm = to_string(m);
+    if (d < 10) dd = "0" + dd;
+    if (m < 10) mm = "0" + mm;
+    return dd + "-" + mm + "-" + to_string(a);
+}
+
+long diasDeTexto(string fecha) {
+    return diasDesdeBase(numeroEn(fecha, 6, 4), numeroEn(fecha, 3, 2), numeroEn(fecha, 0, 2));
+}
+
+void setFechaHoy(string fecha) {
+    fechaActual = fecha;
+}
+
 string fechaHoy() {
-    return "09-10-2026";
+    return fechaActual;
 }
 
-// TODO (Integrante 1): devolver hoy + n dias como "DD-MM-AAAA" (n puede ser negativo).
-//   1) Sumar n * 86400 segundos (un dia) a time(nullptr).
-//   2) Convertir con localtime y armar el texto igual que en fechaHoy().
-// Por ahora devuelve un valor fijo.
-string fechaEnDias(int) {
-    return "09-10-2026";
+string fechaEnDias(int n) {
+    return textoDesdeDias(diasDeTexto(fechaActual) + n);
 }
 
-// TODO (Integrante 1): dias desde hoy hasta fecha ("DD-MM-AAAA"). Negativo = ya paso.
-//   1) Separar dia (posiciones 0-1), mes (3-4) y año (6-9) con substr y stoi.
-//   2) Cargar un tm con esos datos y poner tm_hour = 12 (evita errores por horario de verano).
-//   3) mktime() devuelve los segundos de esa fecha; hacer lo mismo con hoy.
-//   4) (segundosFecha - segundosHoy) / 86400, redondeando bien.
-// Por ahora devuelve 0.
-int diasHasta(const string&) {
-    return 0;
+int diasHasta(string fecha) {
+    return (int)(diasDeTexto(fecha) - diasDeTexto(fechaActual));
 }
 
-// TODO (Integrante 1): normalizar la fecha que escribe el usuario a "DD-MM-AAAA".
-//   Debe aceptar "20/11/2026" y tambien "20-11-2026" (DD/MM/AAAA o DD-MM-AAAA).
-//   Resultado: "20-11-2026" (siempre con guiones).
-//   Usar substr: dia = posiciones 0-1, mes = 3-4, año = 6-9 (el separador se ignora).
-//   Si el texto no tiene 10 caracteres, devolver "" (fecha invalida).
-// Por ahora devuelve "".
-string convertirFecha(const string&) {
-    return "";
+// dias que tiene el mes m del anio a (controla los bisiestos)
+int diasDelMes(int m, int a) {
+    if (m == 2) {
+        bool bisiesto = (a % 4 == 0 && a % 100 != 0) || a % 400 == 0;
+        return bisiesto ? 29 : 28;
+    }
+    if (m == 4 || m == 6 || m == 9 || m == 11) return 30;
+    return 31;
 }
 
-// TODO (Integrante 1): comparar dos fechas "DD-MM-AAAA".
-//   Opcion simple: armar un numero con año, mes y dia (año * 10000 + mes * 100 + dia)
-//   para cada fecha, y devolver la resta (primero - segundo).
-//   Los demas modulos la usan para saber si un lote esta vencido y para ordenar por vencimiento (FEFO).
-// Por ahora devuelve 0.
-int compararFechas(const string&, const string&) {
-    return 0;
+string convertirFecha(string ddmmaaaa) {
+    if (ddmmaaaa.length() != 10) return "";
+    int d = numeroEn(ddmmaaaa, 0, 2);
+    int m = numeroEn(ddmmaaaa, 3, 2);
+    int a = numeroEn(ddmmaaaa, 6, 4);
+    if (m < 1 || m > 12 || a < 1900) return "";
+    if (d < 1 || d > diasDelMes(m, a)) return "";
+    if (ddmmaaaa[2] != '/' && ddmmaaaa[2] != '-') return "";
+    if (ddmmaaaa[5] != '/' && ddmmaaaa[5] != '-') return "";
+    return ddmmaaaa.substr(0, 2) + "-" + ddmmaaaa.substr(3, 2) + "-" + ddmmaaaa.substr(6, 4);
+}
+
+int compararFechas(string a, string b) {
+    long x = numeroEn(a, 6, 4) * 10000 + numeroEn(a, 3, 2) * 100 + numeroEn(a, 0, 2);
+    long y = numeroEn(b, 6, 4) * 10000 + numeroEn(b, 3, 2) * 100 + numeroEn(b, 0, 2);
+    return (int)(x - y);
 }

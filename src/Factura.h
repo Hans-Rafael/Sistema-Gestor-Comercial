@@ -1,3 +1,4 @@
+// Autor: Integrante 3
 #ifndef FACTURA_H
 #define FACTURA_H
 
