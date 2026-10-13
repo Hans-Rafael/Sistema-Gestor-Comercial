@@ -3,7 +3,9 @@
 #include "Pantalla.h"
 using namespace std;
 
-// TODO (Integrante 5): dibujar un marco de texto alrededor del titulo
+// TODO (Integrante 5): dibujar un marco de texto alrededor del titulo. Como arrancar:
+//   cout << "+" << linea de '-' del largo de titulo.length() + 2 << "+" << endl;
+//   cout << "| " << titulo << " |" << endl;  y repetir la linea de abajo (usar un for).
 void mostrarMarco(string titulo) {
     cout << "===== " << titulo << " =====" << endl;
 }
