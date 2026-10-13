@@ -3,10 +3,12 @@
 #define FACTURA_H
 
 #include <iostream>
+#include <string>
 #include "Venta.h"
+#include "Tipos.h"
+
 using namespace std;
 
-// Clase base. FacturaA y FacturaB heredan de ella; armarTexto es virtual
 class Factura {
 protected:
     Venta *venta;
@@ -16,31 +18,22 @@ protected:
     string textoQR;
 
 public:
-    Factura(Venta *v, int n, double t, string c, string qr) {
-        venta = v;
-        numero = n;
-        total = t;
-        cae = c;
-        textoQR = qr;
-    }
+    Factura(Venta *v, int n, double t, string c, string qr);
     virtual ~Factura() {}
-
-    virtual char getTipo() { return '?'; }
-
-    // arma el texto del comprobante (no usa cout): lo muestra PantallaVenta
+    virtual char getTipo();
     virtual string armarTexto();
 };
 
 class FacturaA : public Factura {
 public:
-    FacturaA(Venta *v, int n, double t, string c, string qr) : Factura(v, n, t, c, qr) {}
-    char getTipo() { return 'A'; }
+    FacturaA(Venta *v, int n, double t, string c, string qr);
+    char getTipo() override;
 };
 
 class FacturaB : public Factura {
 public:
-    FacturaB(Venta *v, int n, double t, string c, string qr) : Factura(v, n, t, c, qr) {}
-    char getTipo() { return 'B'; }
+    FacturaB(Venta *v, int n, double t, string c, string qr);
+    char getTipo() override;
 };
 
 #endif

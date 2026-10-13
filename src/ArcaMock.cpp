@@ -1,15 +1,24 @@
-// Autor: Integrante 3
-#include <iostream>
-#include <random>
 #include "ArcaMock.h"
-using namespace std;
 
-// TODO (Integrante 3): 14 digitos al azar (random_device rd; rd() % 10)
 string ArcaMock::generarCAE() {
-    return "00000000000000";
+    random_device rd;
+    string cae = "";
+    for (int i = 0; i < 14; i++) {
+        cae += char('0' + (rd() % 10));
+    }
+    return cae;
 }
 
-// TODO (Integrante 3): armar la linea de texto del QR
-string ArcaMock::generarTextoQR(char, int, double, string) {
-    return "";
+string ArcaMock::generarTextoQR(char tipoFactura, int numero, double total, string cae) {
+    string nro = to_string(numero);
+    while (nro.length() < 8) {
+        nro = "0" + nro;
+    }
+    long centavos = (long)(total * 100 + 0.5);
+    string dec = to_string(centavos % 100);
+    if (dec.length() < 2) {
+        dec = "0" + dec;
+    }
+    return string("ARCA-QR|Factura ") + tipoFactura + "|Nro " + nro
+         + "|Total " + to_string(centavos / 100) + "." + dec + "|CAE " + cae;
 }

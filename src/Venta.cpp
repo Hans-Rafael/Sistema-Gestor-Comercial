@@ -17,14 +17,18 @@ double Venta::precioConIVA(Producto *p) {
 
 char Venta::tipoComprobante() {
     if (condicionCliente == CONSUMIDOR_FINAL) return 'B';
-    return 'A'; // Responsable Inscripto o Monotributo
+    return 'A';   // Responsable Inscripto o Monotributo
 }
 
-// TODO (Integrante 3): implementar las 2 funciones siguientes
-double Venta::subtotalItem(int) {
-    return 0;
+double Venta::subtotalItem(int idx) {
+    if (idx < 0 || idx >= cantItems) return 0;
+    return precioConIVA(productos[idx]) * cantidades[idx];
 }
 
 double Venta::total() {
-    return 0;
+    double suma = 0;
+    for (int i = 0; i < cantItems; i++) {
+        suma += subtotalItem(i);
+    }
+    return suma;
 }

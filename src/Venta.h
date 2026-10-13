@@ -3,42 +3,39 @@
 #define VENTA_H
 
 #include <iostream>
+#include <string>
 #include "Tipos.h"
 #include "Producto.h"
+
 using namespace std;
 
-// Una venta en curso: el carrito y la condicion del cliente
 class Venta {
 private:
-    Producto *productos[MAX_ITEMS_CARRITO]; // apuntan a productos del inventario (no son copias)
+    Producto *productos[MAX_ITEMS_CARRITO];
     int cantidades[MAX_ITEMS_CARRITO];
     int cantItems;
-    int condicionCliente; // CONSUMIDOR_FINAL por defecto
+    int condicionCliente; // CONSUMIDOR_FINAL, RESPONSABLE_INSCRIPTO, etc.
+    int medioPago;        // EFECTIVO, TARJETA, TRANSFERENCIA
 
 public:
-    Venta() {
+    Venta(int condicion, int pago) {
         cantItems = 0;
-        condicionCliente = CONSUMIDOR_FINAL;
+        condicionCliente = condicion;
+        medioPago = pago;
     }
+
+    bool agregarItem(Producto *p, int cantidad);
 
     void setCondicionCliente(int c) { condicionCliente = c; }
     int getCantItems() { return cantItems; }
-    Producto* getProducto(int i) { return productos[i]; }
-    int getCantidad(int i) { return cantidades[i]; }
+    Producto* getProductoItem(int i) { return productos[i]; }
+    int getCantidadItem(int i) { return cantidades[i]; }
+    int getCondicionCliente() { return condicionCliente; }
+    int getMedioPago() { return medioPago; }
 
-    // false si el carrito esta lleno o la cantidad es invalida
-    bool agregarItem(Producto *p, int cantidad);
-
-    // precioBase * (1 + IVA / 100)
     double precioConIVA(Producto *p);
-
-    // 'B' para Consumidor Final, 'A' para Responsable Inscripto o Monotributo
     char tipoComprobante();
-
-    // precio con IVA * cantidad del item i
     double subtotalItem(int i);
-
-    // suma de los subtotales
     double total();
 };
 
