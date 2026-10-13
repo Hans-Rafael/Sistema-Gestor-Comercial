@@ -17,7 +17,7 @@ char Factura::getTipo() {
 }
 
 string Factura::armarTexto() {
-    string txt = "FACTURA " + to_string(getTipo()) + "\n";
+    string txt = "FACTURA " + string(1, getTipo()) + "\n";
     txt += "Numero: " + to_string(numero) + "\n";
     txt += "CAE: " + cae + "\n";
     txt += "Total: $" + to_string(total) + "\n";
