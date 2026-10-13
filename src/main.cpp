@@ -35,7 +35,16 @@ int main() {
     cargarDatosDePrueba(inventario);
     cargarUsuariosDePrueba(auth);
 
-    // TODO (Integrante 5): login con auth.validarLogin y apertura de caja con caja.abrir
+    // TODO (Integrante 5): login y apertura de caja. Como arrancar:
+    //   Usuario *usuario = NULL;   // NO hacer delete: es de Auth
+    //   while (usuario == NULL) {
+    //       usuario = auth.validarLogin(leerLinea("Usuario: "), leerLinea("Clave: "));
+    //       if (usuario == NULL) cout << "Usuario o clave incorrectos" << endl;
+    //   }
+    //   cout << "Bienvenido " << usuario->getNombre() << " (" << usuario->getRol() << ")" << endl;
+    //   caja.abrir(leerDouble("Monto de apertura: ", 0));
+    //   Permisos por rol: usuario->esEncargado() (ej: solo el Encargado cierra la caja, opcion 5).
+    //   Usuarios de prueba: encargado / 1234 y cajero / 1234.
 
     int opcion;
     do {
