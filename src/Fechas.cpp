@@ -5,9 +5,10 @@ using namespace std;
 
 string fechaActual = "01-01-2026"; // se cambia con setFechaHoy
 
-// lee 'largo' digitos desde la posicion 'inicio'; -1 si hay algo que no es digito
+// lee 'largo' digitos desde la posicion 'inicio'; -1 si hay algo que no es digito o el texto es mas corto
 int numeroEn(string texto, int inicio, int largo) {
     int valor = 0;
+    if (inicio + largo > (int)texto.length()) return -1;
     for (int i = inicio; i < inicio + largo; i++) {
         if (texto[i] < '0' || texto[i] > '9') return -1;
         valor = valor * 10 + (texto[i] - '0');

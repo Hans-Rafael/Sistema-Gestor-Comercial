@@ -50,8 +50,15 @@ public:
     // devuelve un puntero al lote i (0 a cantLotes-1): los cambios se guardan en el producto
     Lote* getLote(int i) { return &lotes[i]; }
 
-    // devuelve false si ya hay MAX_LOTES lotes
+    // reutiliza un lote agotado (cantidad 0); devuelve false si ya hay MAX_LOTES lotes
     bool agregarLote(string vencimiento, int cantidad) {
+        for (int i = 0; i < cantLotes; i++) {
+            if (lotes[i].getCantidad() == 0) {
+                lotes[i].setFechaVencimiento(vencimiento);
+                lotes[i].setCantidad(cantidad);
+                return true;
+            }
+        }
         if (cantLotes >= MAX_LOTES) return false;
         lotes[cantLotes].setFechaVencimiento(vencimiento);
         lotes[cantLotes].setCantidad(cantidad);

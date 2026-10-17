@@ -1,3 +1,4 @@
+// Autor: Integrante 1
 #ifndef TIPOS_H
 #define TIPOS_H
 
