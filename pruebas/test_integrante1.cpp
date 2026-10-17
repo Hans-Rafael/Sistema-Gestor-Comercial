@@ -40,6 +40,11 @@ int main() {
     verificar("getLote modifica el original", p.getLote(0)->getCantidad() == 5);
     for (int i = 1; i < MAX_LOTES; i++) p.agregarLote("20-11-2026", 1);
     verificar("agregarLote lleno devuelve false", !p.agregarLote("20-11-2026", 1));
+    p.getLote(3)->setCantidad(0);
+    verificar("agregarLote reutiliza un lote en 0", p.agregarLote("25-12-2026", 7)
+              && p.getLote(3)->getCantidad() == 7 && p.getLote(3)->getFechaVencimiento() == "25-12-2026"
+              && p.getCantLotes() == MAX_LOTES);
+    verificar("compararFechas con texto corto no rompe", compararFechas("", "20-11-2026") < 0);
 
     Usuario *u = new Encargado("ana", "1");
     verificar("polimorfismo getRol", u->getRol() == "Encargado" && u->esEncargado());
