@@ -1,0 +1,45 @@
+// Autor: Integrante 3
+#include <iostream>
+#include "Venta.h"
+#include "Factura.h"
+#include "ArcaMock.h"
+using namespace std;
+
+int fallas = 0;
+void verificar(bool cond, string nombre) {
+    if (cond) cout << "OK    " << nombre << endl;
+    else { cout << "FALLA " << nombre << endl; fallas++; }
+}
+
+int main() {
+    Producto leche("1122334451", "Leche", 1000.00, 21.0, 10);
+    Producto pan("1122334452", "Pan", 1500.00, 10.5, 5);
+
+    Venta v(CONSUMIDOR_FINAL, EFECTIVO);
+    verificar(v.agregarItem(&leche, 2), "agregarItem");
+    verificar(v.agregarItem(&pan, 1), "agregarItem segundo producto");
+    verificar(!v.agregarItem(&pan, 0), "agregarItem rechaza cantidad 0");
+    verificar(v.precioConIVA(&leche) > 1209.99 && v.precioConIVA(&leche) < 1210.01, "precio con IVA 21%");
+    verificar(v.total() > 4077.49 && v.total() < 4077.51, "total 2 leche + 1 pan");
+    verificar(v.tipoComprobante() == 'B', "consumidor final -> factura B");
+
+    Venta va(RESPONSABLE_INSCRIPTO, TARJETA);
+    verificar(va.tipoComprobante() == 'A', "responsable inscripto -> factura A");
+
+    // ArcaMock
+    string cae = ArcaMock::generarCAE();
+    verificar(cae.length() == 14, "CAE de 14 digitos");
+    string qr = ArcaMock::generarTextoQR('B', 1, 2475.5, cae);
+    verificar(qr == "ARCA-QR|Factura B|Nro 00000001|Total 2475.50|CAE " + cae, "texto QR con formato");
+
+    // herencia y virtual con Factura*
+    Factura *f = new FacturaA(&va, 7, 100.5, cae, qr);
+    verificar(f->getTipo() == 'A', "virtual getTipo via puntero base");
+    string txt = f->armarTexto();
+    verificar(txt.find("FACTURA A") != string::npos, "armarTexto usa la clase derivada");
+    verificar(txt.find("Total: $100.50") != string::npos, "monto con dos decimales");
+    delete f;
+
+    cout << (fallas == 0 ? "\nTODO OK" : "\nHAY FALLAS") << endl;
+    return fallas;
+}

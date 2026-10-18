@@ -18,6 +18,9 @@ void mostrarMenu()
     cout << "3. Consola de alertas" << endl;
     cout << "4. Movimientos de caja" << endl;
     cout << "5. Cierre de caja" << endl;
+    cout << "6. Listar productos" << endl;
+    cout << "7. Buscar producto" << endl;
+    cout << "8. Alta de producto" << endl;
     cout << "0. Salir" << endl;
 }
 
@@ -58,7 +61,7 @@ int main()
     do
     {
         mostrarMenu();
-        opcion = leerEntero("Opcion: ", 0, 5);
+        opcion = leerEntero("Opcion: ", 0, 8);
         switch (opcion)
         {
         case 1:
@@ -75,6 +78,15 @@ int main()
             break;
         case 5:
             pantallaCierreCaja(caja);
+            break;
+        case 6:
+            pantallaListar(inventario);
+            break;
+        case 7:
+            pantallaBuscar(inventario);
+            break;
+        case 8:
+            pantallaAltaProducto(inventario);
             break;
         case 0:
             cout << "Hasta luego" << endl;

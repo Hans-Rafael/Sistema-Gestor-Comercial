@@ -22,5 +22,8 @@ void pantallaCompra(Inventario& inv);
 void pantallaAlertas(Inventario& inv);
 void pantallaMovimientosCaja(Caja& caja); // opcion 4
 void pantallaCierreCaja(Caja& caja); // opcion 5
+void pantallaListar(Inventario& inv); // opcion 6
+void pantallaBuscar(Inventario& inv); // opcion 7
+void pantallaAltaProducto(Inventario& inv); // opcion 8
 
 #endif

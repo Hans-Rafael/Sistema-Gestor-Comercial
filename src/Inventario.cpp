@@ -5,55 +5,111 @@
 #include "Fechas.h"
 using namespace std;
 
-Inventario::Inventario(int cap) {
+Inventario::Inventario(int cap)
+{
     capacidad = cap;
     cantidad = 0;
-    productos = new Producto*[capacidad];
+    productos = new Producto *[capacidad];
 }
 
-Inventario::~Inventario() {
-    for (int i = 0; i < cantidad; i++) {
+Inventario::~Inventario()
+{
+    for (int i = 0; i < cantidad; i++)
+    {
         delete productos[i];
     }
     delete[] productos;
 }
 
-bool Inventario::agregarProducto(Producto *p) {
-    if (cantidad >= capacidad) return false;
+Producto *Inventario::buscarProducto(string codigo)
+{
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (productos[i]->getCodigoBarras() == codigo)
+            return productos[i];
+    }
+    return NULL;
+}
+bool Inventario::agregarProducto(Producto *p)
+{
+    if (cantidad >= capacidad)
+        return false;
     productos[cantidad] = p;
     cantidad++;
     return true;
 }
 
-Producto* Inventario::buscarProducto(string codigo) {
-    for (int i = 0; i < cantidad; i++) {
-        if (productos[i]->getCodigoBarras() == codigo) return productos[i];
+// suma solo los lotes NO vencidos
+int Inventario::stockTotal(Producto *p, string hoy)
+{
+    int total = 0;
+    for (int i = 0; i < p->getCantLotes(); i++)
+    {
+        Lote *l = p->getLote(i);
+        if (compararFechas(l->getFechaVencimiento(), hoy) >= 0)
+            total += l->getCantidad();
     }
-    return NULL;
+    return total;
 }
 
-// TODO (Integrante 2): sumar solo los lotes NO vencidos. Como arrancar:
-//   int total = 0;
-//   for (int i = 0; i < p->getCantLotes(); i++) {
-//       Lote *l = p->getLote(i);   // puntero, NO copia
-//       if (compararFechas(l->getFechaVencimiento(), hoy) >= 0) total += l->getCantidad();
-//   }
-//   return total;
-int Inventario::stockTotal(Producto *, string) {
-    return 0;
+// FEFO: primero el que vence antes; saltea vencidos y reparte entre varios lotes
+bool Inventario::descontarFEFO(Producto *p, int cantidad, string hoy)
+{
+    if (cantidad <= 0 || stockTotal(p, hoy) < cantidad)
+        return false;
+    int n = p->getCantLotes();
+    // 1) ordenar lotes (burbuja): el que vence primero va primero
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - 1 - i; j++)
+        {
+            Lote *a = p->getLote(j);
+            Lote *b = p->getLote(j + 1);
+            if (compararFechas(a->getFechaVencimiento(), b->getFechaVencimiento()) > 0)
+            {
+                Lote aux = *a;
+                *a = *b;
+                *b = aux;
+            }
+        }
+    }
+    // 2) descontar lote por lote hasta completar la cantidad
+    for (int i = 0; i < n && cantidad > 0; i++)
+    {
+        Lote *l = p->getLote(i);
+        if (compararFechas(l->getFechaVencimiento(), hoy) < 0)
+            continue; // saltear vencidos
+        int sacar = l->getCantidad();
+        if (cantidad < sacar)
+            sacar = cantidad; // el menor entre lo que hay y lo que falta
+        l->setCantidad(l->getCantidad() - sacar);
+        cantidad -= sacar;
+    }
+    return true;
 }
 
-// TODO (Integrante 2): FEFO. Pasos (la guia, seccion 7, trae el codigo completo):
-//   0) si cantidad <= 0 o stockTotal(p, hoy) < cantidad -> return false
-//   1) ordenar los lotes con burbuja: si compararFechas(a, b) > 0 intercambiar (Lote aux = *a; *a = *b; *b = aux;)
-//   2) recorrer los lotes: saltear los vencidos (compararFechas(fecha, hoy) < 0)
-//      sacar = el menor entre l->getCantidad() y lo que falta; l->setCantidad(...); cantidad -= sacar;
-//   Ojo: 3 unidades en un lote y 4 en otro, una venta de 5 debe funcionar.
-bool Inventario::descontarFEFO(Producto *, int, string) {
+bool Inventario::esStockCritico(Producto *p, string hoy)
+{
+    return stockTotal(p, hoy) <= p->getStockMinimo();
+}
+
+// auxiliar: devuelve true si nombre contiene texto (sin usar find ni regex)
+bool contieneTexto(string nombre, string texto) {
+    int n = nombre.length();
+    int t = texto.length();
+    for (int i = 0; i + t <= n; i++) {
+        bool igual = true;
+        for (int j = 0; j < t && igual; j++) {
+            if (nombre[i + j] != texto[j]) igual = false;
+        }
+        if (igual) return true;
+    }
     return false;
 }
 
-// TODO (Integrante 2): return stockTotal(p, hoy) <= p->getStockMinimo();
-bool Inventario::esStockCritico(Producto *, string) {
-    return false;
+int Inventario::buscarPorNombre(string texto, int desde) {
+    for (int i = desde; i < cantidad; i++) {
+        if (contieneTexto(productos[i]->getNombre(), texto)) return i;
+    }
+    return -1;
 }
