@@ -24,11 +24,11 @@ bool Auth::agregarUsuario(Usuario *u) {
     return true;
 }
 
-// TODO (Integrante 4): como arrancar:
-//   for (int i = 0; i < cantidad; i++) {
-//       if (usuarios[i]->getNombre() == nombre && usuarios[i]->claveCorrecta(clave)) return usuarios[i];
-//   }
-//   return NULL;   // (nombrar los parametros: string nombre, string clave)
-Usuario* Auth::validarLogin(string, string) {
+Usuario* Auth::validarLogin(string nombre, string clave) {
+    for (int i = 0; i < cantidad; i++) {
+        if (usuarios[i]->getNombre() == nombre && usuarios[i]->claveCorrecta(clave)) {
+            return usuarios[i];
+        }
+    }
     return NULL;
 }
