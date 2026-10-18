@@ -10,7 +10,8 @@
 #include "Fechas.h"
 using namespace std;
 
-void mostrarMenu() {
+void mostrarMenu()
+{
     cout << "===== GESTOR DE NEGOCIO =====" << endl;
     cout << "1. Nueva venta" << endl;
     cout << "2. Ingresar compra / lote" << endl;
@@ -20,12 +21,19 @@ void mostrarMenu() {
     cout << "0. Salir" << endl;
 }
 
-int main() {
+int main()
+{
     // no usamos <ctime>: la fecha de hoy se escribe a mano
-    string fecha = "";
-    while (fecha == "") {
-        fecha = convertirFecha(leerLinea("Fecha de hoy (DD-MM-AAAA): "));
-        if (fecha == "") cout << "Fecha invalida" << endl;
+    string entrada, fecha = "";
+
+    while (fecha == "")
+    {
+        // fecha = convertirFecha(leerLinea("Fecha de hoy (DD-MM-AAAA): "));
+        cout << "Fecha de hoy (DD-MM-AAAA): ";
+        getline(cin, entrada);
+        fecha = convertirFecha(entrada);
+        if (fecha == "")
+            cout << "Fecha invalida" << endl;
     }
     setFechaHoy(fecha);
 
@@ -47,16 +55,30 @@ int main() {
     //   Usuarios de prueba: encargado / 1234 y cajero / 1234.
 
     int opcion;
-    do {
+    do
+    {
         mostrarMenu();
         opcion = leerEntero("Opcion: ", 0, 5);
-        switch (opcion) {
-            case 1: pantallaVenta(inventario, caja); break;
-            case 2: pantallaCompra(inventario); break;
-            case 3: pantallaAlertas(inventario); break;
-            case 4: pantallaMovimientosCaja(caja); break;
-            case 5: pantallaCierreCaja(caja); break;
-            case 0: cout << "Hasta luego" << endl; break;
+        switch (opcion)
+        {
+        case 1:
+            pantallaVenta(inventario, caja);
+            break;
+        case 2:
+            pantallaCompra(inventario);
+            break;
+        case 3:
+            pantallaAlertas(inventario);
+            break;
+        case 4:
+            pantallaMovimientosCaja(caja);
+            break;
+        case 5:
+            pantallaCierreCaja(caja);
+            break;
+        case 0:
+            cout << "Hasta luego" << endl;
+            break;
         }
     } while (opcion != 0);
     return 0;
