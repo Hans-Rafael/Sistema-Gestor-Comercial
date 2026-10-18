@@ -26,6 +26,9 @@ public:
     // devuelve NULL si no existe
     Producto* buscarProducto(string codigo);
 
+    // indice o -1; nombre contiene texto
+    int buscarPorNombre(string texto, int desde);
+
     // suma solo los lotes NO vencidos
     int stockTotal(Producto *p, string hoy);
 

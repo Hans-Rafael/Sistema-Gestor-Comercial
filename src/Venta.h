@@ -3,7 +3,6 @@
 #define VENTA_H
 
 #include <iostream>
-#include <string>
 #include "Tipos.h"
 #include "Producto.h"
 
@@ -27,6 +26,7 @@ public:
     bool agregarItem(Producto *p, int cantidad);
 
     void setCondicionCliente(int c) { condicionCliente = c; }
+    void setMedioPago(int m) { medioPago = m; }
     int getCantItems() { return cantItems; }
     Producto* getProductoItem(int i) { return productos[i]; }
     int getCantidadItem(int i) { return cantidades[i]; }

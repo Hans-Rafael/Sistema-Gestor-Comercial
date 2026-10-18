@@ -1,4 +1,7 @@
+// Autor: Integrante 3
+#include <iostream>
 #include "ArcaMock.h"
+using namespace std;
 
 string ArcaMock::generarCAE() {
     random_device rd;

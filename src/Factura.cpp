@@ -16,11 +16,19 @@ char Factura::getTipo() {
     return '?';
 }
 
+// monto con dos decimales: 1210.5 -> "1210.50" (to_string daria "1210.500000")
+static string formatearMonto(double monto) {
+    long centavos = (long)(monto * 100 + 0.5);
+    string dec = to_string(centavos % 100);
+    if (dec.length() < 2) dec = "0" + dec;
+    return to_string(centavos / 100) + "." + dec;
+}
+
 string Factura::armarTexto() {
     string txt = "FACTURA " + string(1, getTipo()) + "\n";
     txt += "Numero: " + to_string(numero) + "\n";
     txt += "CAE: " + cae + "\n";
-    txt += "Total: $" + to_string(total) + "\n";
+    txt += "Total: $" + formatearMonto(total) + "\n";
     txt += "QR: " + textoQR + "\n";
     return txt;
 }

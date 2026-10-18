@@ -3,7 +3,6 @@
 #define FACTURA_H
 
 #include <iostream>
-#include <string>
 #include "Venta.h"
 #include "Tipos.h"
 

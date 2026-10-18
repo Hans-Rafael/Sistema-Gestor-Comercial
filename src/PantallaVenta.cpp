@@ -1,5 +1,5 @@
+// Autor: Integrante 3
 #include <iostream>
-#include <string>
 #include "Inventario.h"
 #include "Venta.h"
 #include "ArcaMock.h"
@@ -16,9 +16,7 @@ void pantallaVenta(Inventario &inventario, Caja &caja) {
     cout << "=== MODULO DE VENTAS ===" << endl;
 
     int condicion = leerEntero("Condicion cliente (0: Consumidor Final, 1: Resp Inscripto, 2: Monotributo): ", 0, 2);
-    int medioPago = leerEntero("Medio de pago (0: Efectivo, 1: Tarjeta, 2: Transferencia): ", 0, 2);
-
-    Venta venta(condicion, medioPago);
+    Venta venta(condicion, EFECTIVO);
 
     char continuar = 's';
     while (continuar == 's' || continuar == 'S') {
@@ -34,7 +32,7 @@ void pantallaVenta(Inventario &inventario, Caja &caja) {
             if (inventario.descontarFEFO(p, cantidad, fechaHoy())) {
                 venta.agregarItem(p, cantidad);
                 cout << "Item agregado al carrito y stock descontado con FEFO." << endl;
-                
+
                 if (inventario.esStockCritico(p, fechaHoy())) {
                     cout << "[ADVERTENCIA: Stock Critico]" << endl;
                 }
@@ -49,28 +47,29 @@ void pantallaVenta(Inventario &inventario, Caja &caja) {
     }
 
     if (venta.getCantItems() > 0) {
-        double total = 0;
-        for (int i = 0; i < venta.getCantItems(); i++) {
-            total += venta.precioConIVA(venta.getProductoItem(i)) * venta.getCantidadItem(i);
-        }
+        int medioPago = leerEntero("Medio de pago (0: Efectivo, 1: Tarjeta, 2: Transferencia): ", 0, 2);
+        venta.setMedioPago(medioPago);
+
+        double total = venta.total();
+        static int ultimoNumero = 0; // numeracion de facturas durante la sesion
+        int numero = ++ultimoNumero;
 
         string cae = ArcaMock::generarCAE();
-        string qr = ArcaMock::generarTextoQR(venta.tipoComprobante(), 1, total, cae);
+        string qr = ArcaMock::generarTextoQR(venta.tipoComprobante(), numero, total, cae);
 
         Factura *f;
         if (venta.tipoComprobante() == 'A') {
-            f = new FacturaA(&venta, 1, total, cae, qr);
+            f = new FacturaA(&venta, numero, total, cae, qr);
         } else {
-            f = new FacturaB(&venta, 1, total, cae, qr);
+            f = new FacturaB(&venta, numero, total, cae, qr);
         }
 
         limpiarPantalla();
         cout << f->armarTexto() << endl;
 
         if (medioPago == EFECTIVO) {
-          double pagoCon = leerDouble("Efectivo con el que paga: ", 0);
-            double vuelto = pagoCon - total;
-            cout << "Vuelto: $" << vuelto << endl;
+            double pagoCon = leerDouble("Efectivo con el que paga: ", total); // no puede ser menor al total
+            cout << "Vuelto: $" << (pagoCon - total) << endl;
             caja.registrarVentaEfectivo(total);
         }
 

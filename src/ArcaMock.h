@@ -1,10 +1,9 @@
+// Autor: Integrante 3
 #ifndef ARCAMOCK_H
 #define ARCAMOCK_H
 
 #include <iostream>
 #include <random>
-#include <string>
-
 using namespace std;
 
 class ArcaMock {

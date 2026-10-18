@@ -6,13 +6,31 @@
 #include "Pantalla.h"
 using namespace std;
 
-// TODO (Integrante 2): recibir mercaderia como lote (opcion 2). Como arrancar (escenario 2):
-//   string codigo = leerLinea("Codigo de barras: ");
-//   Producto *p = inv.buscarProducto(codigo);
-//   if (p == NULL) { cout << "Producto inexistente" << endl; return; }   // controlar NULL
-//   int cant = leerEntero("Cantidad: ", 1, 100000);
-//   string venc = convertirFecha(leerLinea("Vencimiento (DD/MM/AAAA): "));   // "" si es invalida: repetir
-//   if (!p->agregarLote(venc, cant)) cout << "No hay lugar para mas lotes" << endl;
-void pantallaCompra(Inventario&) {
-    cout << "(pendiente: Integrante 2 - compra / lote)" << endl;
+void pantallaCompra(Inventario& inv) {   // opcion 2: recibir mercaderia como lote
+    string codigo = leerLinea("Codigo de barras: ");
+    Producto *p = inv.buscarProducto(codigo);
+    if (p == NULL) {
+        cout << "Producto inexistente" << endl;
+        return;
+    }
+    cout << "Producto: " << p->getNombre() << endl;
+    int cant = leerEntero("Cantidad: ", 1, 100000);
+
+    // repite hasta tener una fecha valida y que no este ya vencida
+    string venc = "";
+    while (venc == "") {
+        venc = convertirFecha(leerLinea("Vencimiento (DD/MM/AAAA): "));
+        if (venc == "") {
+            cout << "Fecha invalida" << endl;
+        } else if (compararFechas(venc, fechaHoy()) < 0) {
+            cout << "La fecha ya paso" << endl;
+            venc = "";
+        }
+    }
+
+    if (!p->agregarLote(venc, cant)) {
+        cout << "No hay lugar para mas lotes de este producto" << endl;
+        return;
+    }
+    cout << "Lote cargado (vence " << venc << "). Stock actual: " << inv.stockTotal(p, fechaHoy()) << endl;
 }

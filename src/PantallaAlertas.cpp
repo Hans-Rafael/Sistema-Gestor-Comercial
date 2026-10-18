@@ -7,14 +7,45 @@
 #include "Pantalla.h"
 using namespace std;
 
-// TODO (Integrante 2): consola de alertas (opcion 3). Como arrancar:
-//   Alertas alertas;
-//   Seccion 1 - recorrer inv.getProducto(i) y sus lotes (getLote(j)); saltear lotes con cantidad 0;
-//     estado = alertas.estadoVencimiento(fecha); si no es VIGENTE mostrar producto, lote, fecha
-//     y alertas.nombreEstado(estado), con conColor(...) (rojo/amarillo, ver Pantalla.h).
-//   Seccion 2 - productos con inv.esStockCritico(p, fechaHoy()) -> mostrar nombre y inv.stockTotal.
-//   Al final pausar(). Opcional: exportar a CSV con ofstream.
-//   Sin cin/cout en Alertas ni Inventario: solo aca.
-void pantallaAlertas(Inventario&) {
-    cout << "(pendiente: Integrante 2 - alertas)" << endl;
+void pantallaAlertas(Inventario& inv) {   // opcion 3: consola de alertas
+    Alertas alertas;
+    limpiarPantalla();
+    mostrarMarco("ALERTAS");
+
+    // Seccion 1: lotes vencidos, criticos y por vencer (los VIGENTES no se muestran)
+    cout << "--- Lotes vencidos / criticos / por vencer ---" << endl;
+    int avisos = 0;
+    for (int i = 0; i < inv.getCantidad(); i++) {
+        Producto *p = inv.getProducto(i);
+        for (int j = 0; j < p->getCantLotes(); j++) {
+            Lote *l = p->getLote(j);
+            if (l->getCantidad() == 0) continue;   // lote agotado
+            int estado = alertas.estadoVencimiento(l->getFechaVencimiento());
+            if (estado == VIGENTE) continue;
+
+            string texto = p->getNombre() + " | vence " + l->getFechaVencimiento()
+                         + " | cant: " + to_string(l->getCantidad())
+                         + " | " + alertas.nombreEstado(estado);
+            if (estado == VENCIDO || estado == CRITICO) cout << conColor(texto, COLOR_ROJO) << endl;
+            else cout << conColor(texto, COLOR_AMARILLO) << endl;
+            avisos++;
+        }
+    }
+    if (avisos == 0) cout << "No hay lotes vencidos ni por vencer" << endl;
+
+    // Seccion 2: productos con stock critico (stock valido <= stock minimo)
+    cout << "\n--- Productos con stock critico ---" << endl;
+    int criticos = 0;
+    for (int i = 0; i < inv.getCantidad(); i++) {
+        Producto *p = inv.getProducto(i);
+        if (inv.esStockCritico(p, fechaHoy())) {
+            string texto = p->getNombre() + " | stock: " + to_string(inv.stockTotal(p, fechaHoy()))
+                         + " (minimo " + to_string(p->getStockMinimo()) + ")";
+            cout << conColor(texto, COLOR_ROJO) << endl;
+            criticos++;
+        }
+    }
+    if (criticos == 0) cout << "No hay productos con stock critico" << endl;
+
+    pausar();
 }
