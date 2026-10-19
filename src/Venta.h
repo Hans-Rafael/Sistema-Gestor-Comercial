@@ -3,40 +3,30 @@
 #define VENTA_H
 
 #include <iostream>
-#include "Tipos.h"
 #include "Producto.h"
+#include "Tipos.h"
 
 using namespace std;
 
+const int MAX_ITEMS_VENTA = 50;
+
 class Venta {
 private:
-    Producto *productos[MAX_ITEMS_CARRITO];
-    int cantidades[MAX_ITEMS_CARRITO];
+    Producto* productos[MAX_ITEMS_VENTA];
+    int cantidades[MAX_ITEMS_VENTA];
     int cantItems;
-    int condicionCliente; // CONSUMIDOR_FINAL, RESPONSABLE_INSCRIPTO, etc.
-    int medioPago;        // EFECTIVO, TARJETA, TRANSFERENCIA
+    int condicionCliente; // CONSUMIDOR_FINAL, RESPONSABLE_INSCRIPTO, MONOTRIBUTO
 
 public:
-    Venta(int condicion, int pago) {
-        cantItems = 0;
-        condicionCliente = condicion;
-        medioPago = pago;
-    }
-
+    Venta(int condicion);
     bool agregarItem(Producto *p, int cantidad);
-
-    void setCondicionCliente(int c) { condicionCliente = c; }
-    void setMedioPago(int m) { medioPago = m; }
-    int getCantItems() { return cantItems; }
+    int getCantidadTotalItems() { return cantItems; }
     Producto* getProductoItem(int i) { return productos[i]; }
     int getCantidadItem(int i) { return cantidades[i]; }
-    int getCondicionCliente() { return condicionCliente; }
-    int getMedioPago() { return medioPago; }
-
-    double precioConIVA(Producto *p);
-    char tipoComprobante();
     double subtotalItem(int i);
-    double total();
+    double precioConIVA(Producto *p);
+    double calcularTotal();
+    char tipoComprobante();
 };
 
 #endif
