@@ -17,10 +17,16 @@ static int proximoNumeroFactura = 1;
 void pantallaVenta(Inventario& inventario, Caja& caja) {
     limpiarPantalla();
     cout << "========================================" << endl;
-    cout << "              NUEVA VENTA               " << endl;
+    cout << "               NUEVA VENTA              " << endl;
     cout << "========================================" << endl;
 
-    int condicion = leerEntero("Condicion del cliente (0 = Consumidor Final, 1 = Responsable Inscripto, 2 = Monotributo): ", 0, 2);
+    // Menú vertical para la condición fiscal
+    cout << "Condicion del cliente:" << endl;
+    cout << "  0 = Consumidor Final" << endl;
+    cout << "  1 = Responsable Inscripto" << endl;
+    cout << "  2 = Monotributo" << endl;
+    int condicion = leerEntero("Ingrese una opcion: ", 0, 2);
+    
     Venta venta(condicion);
 
     bool agregando = true;
@@ -73,7 +79,12 @@ void pantallaVenta(Inventario& inventario, Caja& caja) {
     if (dec.length() < 2) dec = "0" + dec;
     cout << "\nTotal a pagar: $" << to_string(centavos / 100) << "." << dec << endl;
 
-    int medioPago = leerEntero("Medio de pago (0 = Efectivo, 1 = Tarjeta, 2 = Transferencia): ", 0, 2);
+    // Menú vertical para el medio de pago
+    cout << "\nMedio de pago:" << endl;
+    cout << "  0 = Efectivo" << endl;
+    cout << "  1 = Tarjeta" << endl;
+    cout << "  2 = Transferencia" << endl;
+    int medioPago = leerEntero("Ingrese una opcion: ", 0, 2);
 
     double vuelto = 0.0;
     if (medioPago == 0) { // Efectivo
