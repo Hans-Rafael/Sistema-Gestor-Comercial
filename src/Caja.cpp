@@ -11,23 +11,30 @@ double Caja::diferencia(double efectivoContado) {
     return efectivoContado - efectivoEsperado();
 }
 
-// TODO (Integrante 4): implementar las 4 funciones siguientes. Como arrancar:
-//   abrir: if (abierta) return false; abierta = true; apertura = montoInicial; return true;
-//   registrarGasto / registrarIngreso: if (!abierta || monto <= 0) return false;
-//       gastos += monto (o ingresos += monto); return true;
-//   registrarVentaEfectivo: ventasEfectivo += monto;
-//   (poner nombre al parametro en vez de dejarlo sin nombre: double montoInicial, double monto)
-bool Caja::abrir(double) {
-    return false;
+bool Caja::abrir(double montoInicial) {
+    if (abierta || montoInicial < 0) return false;
+    abierta = true;
+    apertura = montoInicial;
+    ventasEfectivo = 0;
+    ingresos = 0;
+    gastos = 0;
+    return true;
 }
 
-bool Caja::registrarGasto(double) {
-    return false;
+bool Caja::registrarGasto(double monto) {
+    if (!abierta || monto <= 0) return false;
+    gastos += monto;
+    return true;
 }
 
-bool Caja::registrarIngreso(double) {
-    return false;
+bool Caja::registrarIngreso(double monto) {
+    if (!abierta || monto <= 0) return false;
+    ingresos += monto;
+    return true;
 }
 
-void Caja::registrarVentaEfectivo(double) {
+void Caja::registrarVentaEfectivo(double monto) {
+    if (abierta && monto > 0) {
+        ventasEfectivo += monto;
+    }
 }
