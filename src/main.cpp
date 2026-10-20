@@ -44,9 +44,8 @@ int main()
     Inventario inventario(CAPACIDAD_PRODUCTOS);
     Auth auth(CAPACIDAD_USUARIOS);
     Caja caja;
-    // si hay productos guardados en productos.txt se cargan; si no, datos de prueba
-    if (cargarProductos(inventario) == 0)
-        cargarDatosDePrueba(inventario);
+    // productos.txt se carga si existe; si no existe, el inventario arranca vacio
+    cargarProductos(inventario);
     cargarUsuariosDePrueba(auth);
 
     // login: Usuario es de Auth, no se hace delete

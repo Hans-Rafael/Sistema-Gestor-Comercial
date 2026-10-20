@@ -8,6 +8,9 @@ using namespace std;
 void guardarProductos(Inventario& inv) {
     ofstream archivoP("productos.txt");
     ofstream archivoL("lotes.txt");
+    // precios con dos decimales fijos, para no perder centavos al leer
+    archivoP.setf(ios::fixed);
+    archivoP.precision(2);
     for (int i = 0; i < inv.getCantidad(); i++) {
         Producto *p = inv.getProducto(i);
         archivoP << p->getCodigoBarras() << ";" << p->getNombre() << ";" << p->getPrecioBase() << ";"
