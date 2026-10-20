@@ -27,6 +27,9 @@ Hay que tener `g++` instalado. Los warnings cuentan como errores a corregir (`-W
 - Sin `struct`, `enum`, `nullptr`, `const T&`, `try/catch` ni `<ctime>`.
 - Al iniciar el programa pide la fecha de hoy (DD-MM-AAAA).
 - Usuarios de prueba: `encargado` / `1234` y `cajero` / `1234`.
+- Inventario: si existe `productos.txt`, se carga al iniciar; si no existe, arranca vacio. Al salir se guardan `productos.txt` y `lotes.txt`.
+  - `productos.txt`: una linea por producto, campos separados por `;`: `codigo;nombre;precio;iva;stockMinimo`
+  - `lotes.txt`: una linea por lote, campos separados por `;`: `codigo;vencimiento;cantidad`
 
 ## Pendientes
 
