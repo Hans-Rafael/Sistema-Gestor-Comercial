@@ -39,7 +39,7 @@ int main() {
     verificar(inv.buscarProducto("1111111111") == p, "buscarProducto por codigo");
     verificar(inv.buscarProducto("0000000000") == NULL, "buscarProducto devuelve NULL si no existe");
     verificar(inv.buscarPorNombre("FEFO", 0) == 0, "buscarPorNombre encuentra parte del nombre");
-    verificar(inv.buscarPorNombre("fefo", 0) == -1, "buscarPorNombre distingue mayusculas");
+    verificar(inv.buscarPorNombre("fefo", 0) == 0, "buscarPorNombre ignora mayusculas");
 
     cout << (fallas == 0 ? "\nTODO OK" : "\nHAY FALLAS") << endl;
     return fallas;

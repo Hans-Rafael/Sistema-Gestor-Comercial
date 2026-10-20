@@ -1,5 +1,6 @@
 // Autor: Integrante 2
 #include <iostream>
+#include <cctype>
 #include <cstdlib>
 #include "Inventario.h"
 #include "Fechas.h"
@@ -94,13 +95,14 @@ bool Inventario::esStockCritico(Producto *p, string hoy)
 }
 
 // auxiliar: devuelve true si nombre contiene texto (sin usar find ni regex)
+// la busqueda ignora mayusculas y minusculas: "ar" encuentra "Arroz"
 bool contieneTexto(string nombre, string texto) {
     int n = nombre.length();
     int t = texto.length();
     for (int i = 0; i + t <= n; i++) {
         bool igual = true;
         for (int j = 0; j < t && igual; j++) {
-            if (nombre[i + j] != texto[j]) igual = false;
+            if (tolower(nombre[i + j]) != tolower(texto[j])) igual = false;
         }
         if (igual) return true;
     }
