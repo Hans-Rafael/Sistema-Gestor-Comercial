@@ -14,7 +14,7 @@ const string COLOR_VERDE = "\033[32m";
 const string COLOR_RESET = "\033[0m";
 
 void mostrarMarco(string titulo);
-string conColor(string texto, string color);
+string Color(string texto, string color);
 
 // pantallas de cada modulo (cada responsable las escribe en su PantallaXxx.cpp)
 void pantallaVenta(Inventario& inv, Caja& caja);
