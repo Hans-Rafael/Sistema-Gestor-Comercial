@@ -8,6 +8,9 @@ using namespace std;
 void guardarProductos(Inventario& inv) {
     ofstream archivoP("productos.txt");
     ofstream archivoL("lotes.txt");
+    // precios con dos decimales fijos, para no perder centavos al leer
+    archivoP.setf(ios::fixed);
+    archivoP.precision(2);
     for (int i = 0; i < inv.getCantidad(); i++) {
         Producto *p = inv.getProducto(i);
         archivoP << p->getCodigoBarras() << ";" << p->getNombre() << ";" << p->getPrecioBase() << ";"
@@ -53,4 +56,28 @@ int cargarProductos(Inventario& inv) {
     }
     archivoL.close();
     return leidos;
+}
+
+bool guardarArrayProductos(Inventario& inv, string nombreArchivo) {
+    ofstream archivo(nombreArchivo.c_str());
+    if (!archivo) return false;
+
+    archivo.setf(ios::fixed);
+    archivo.precision(2);
+    archivo << "             LISTADO DE PRODUCTOS EN INVENTARIO          " << endl;
+    archivo << "=========================================================" << endl;
+    for (int i = 0; i < inv.getCantidad(); i++) {
+        Producto *p = inv.getProducto(i);
+        archivo << "Codigo: " << p->getCodigoBarras()
+                << " -- Producto: " << p->getNombre()
+                << " -- Precio base: $" << p->getPrecioBase()
+                << " -- IVA: " << p->getPorcentajeIVA() << "%"
+                << " -- Stock total: " << inv.stockTotal(p, fechaHoy());
+        if (inv.esStockCritico(p, fechaHoy())) archivo << " [ADVERTENCIA: Stock Critico]";
+        archivo << endl;
+    }
+    archivo << "=========================================================" << endl;
+    archivo << "Total de productos listados: " << inv.getCantidad() << endl;
+    archivo.close();
+    return true;
 }

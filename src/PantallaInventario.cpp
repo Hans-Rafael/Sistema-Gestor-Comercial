@@ -4,6 +4,7 @@
 #include "Fechas.h"
 #include "Validaciones.h"
 #include "Pantalla.h"
+#include "ArchivoHelper.h"
 using namespace std;
 
 void mostrarProducto(Inventario& inv, Producto *p) {
@@ -16,7 +17,13 @@ void mostrarProducto(Inventario& inv, Producto *p) {
  
 void pantallaListar(Inventario& inv) {            // opcion 6
     if (inv.getCantidad() == 0) { cout << "No hay productos" << endl; return; }
+    cout << "  Codigo   |-->  Producto  |-->  Precio base + IVA  |-->  Stock total\n" << endl;
     for (int i = 0; i < inv.getCantidad(); i++) mostrarProducto(inv, inv.getProducto(i));
+
+    if (leerEntero("\nDesea exportar/guardar este listado en el archivo listado_productos.txt? (1 = Si, 2 = No): ", 1, 2) == 1) {
+        if (guardarArrayProductos(inv, "listado_productos.txt")) cout << "Listado guardado en listado_productos.txt" << endl;
+        else cout << "[ERROR] No se pudo crear listado_productos.txt" << endl;
+    }
 }
  
 void pantallaBuscar(Inventario& inv) {            // opcion 7
