@@ -50,14 +50,19 @@ void pantallaVenta(Inventario& inventario, Caja& caja) {
 
         int cantidad = leerEntero("Cantidad a llevar: ", 1, stockDisponible);
 
-        // Llamar agregarItem ANTES de descontarFEFO
-        if (!venta.agregarItem(p, cantidad)) {
-            cout << "[ERROR] No se pudo agregar el producto al carrito." << endl;
+        // controlar el carrito antes de tocar el stock: si no hay lugar, no queda stock descontado sin item
+        if (venta.getCantidadTotalItems() >= MAX_ITEMS_VENTA) {
+            cout << "[ERROR] El carrito esta lleno." << endl;
+            agregando = false;
             continue;
         }
 
-        // Descontar por FEFO tras confirmar el item en el carrito
-        inventario.descontarFEFO(p, cantidad, fechaHoy());
+        // FEFO primero: si no se puede descontar, el item no entra al carrito
+        if (!inventario.descontarFEFO(p, cantidad, fechaHoy())) {
+            cout << "[ERROR] No se pudo descontar el stock (lotes vencidos o insuficientes)." << endl;
+            continue;
+        }
+        venta.agregarItem(p, cantidad); // no falla: la capacidad se controlo arriba
 
         if (inventario.esStockCritico(p, fechaHoy())) {
             cout << "[ADVERTENCIA: Stock Critico]" << endl;
