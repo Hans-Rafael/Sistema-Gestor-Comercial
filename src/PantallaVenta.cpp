@@ -1,5 +1,6 @@
 // Autor: Integrante 3
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "Pantalla.h"
 #include "Validaciones.h"
@@ -14,6 +15,18 @@ using namespace std;
 
 static int proximoNumeroFactura = 1;
 
+void guardarFacturaEnTxt(Factura* f, int numeroFactura) {
+    string nombreArchivo = "factura_" + to_string(numeroFactura) + ".txt";
+    ofstream archivo(nombreArchivo.c_str());
+
+    if (archivo.is_open()) {
+        archivo << f->armarTexto();
+        archivo.close();
+        cout << "[OK] Factura guardada correctamente en " << nombreArchivo << endl;
+    } else {
+        cout << "[ERROR] No se pudo crear el archivo de la factura." << endl;
+    }
+}
 void pantallaVenta(Inventario& inventario, Caja& caja) {
     limpiarPantalla();
     cout << "========================================" << endl;
@@ -109,13 +122,12 @@ void pantallaVenta(Inventario& inventario, Caja& caja) {
     int numFacturaActual = proximoNumeroFactura++;
     string cae = ArcaMock::generarCAE();
     char tipoComp = venta.tipoComprobante();
-    string qr = ArcaMock::generarTextoQR(tipoComp, numFacturaActual, totalVenta, cae);
-
-    Factura *factura = NULL;
+    
+Factura *factura = NULL;
     if (tipoComp == 'A') {
-        factura = new FacturaA(&venta, numFacturaActual, totalVenta, cae, qr);
+        factura = new FacturaA(&venta, numFacturaActual, totalVenta, cae);
     } else {
-        factura = new FacturaB(&venta, numFacturaActual, totalVenta, cae, qr);
+        factura = new FacturaB(&venta, numFacturaActual, totalVenta, cae);
     }
 
     limpiarPantalla();
@@ -127,7 +139,11 @@ void pantallaVenta(Inventario& inventario, Caja& caja) {
         if (decVuelto.length() < 2) decVuelto = "0" + decVuelto;
         cout << "Vuelto al cliente: $" << to_string(cVuelto / 100) << "." << decVuelto << endl;
     }
-
+// Opción para guardar la factura en archivo txt solicitada por el equipo
+    int opcionTxt = leerEntero("\nDesea imprimir/guardar la factura en archivo .txt? (1 = Si, 2 = No): ", 1, 2);
+    if (opcionTxt == 1) {
+        guardarFacturaEnTxt(factura, numFacturaActual);
+    }
     delete factura;
     cout << "\nVenta realizada con exito!" << endl;
 }

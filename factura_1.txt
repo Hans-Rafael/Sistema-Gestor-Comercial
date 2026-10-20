@@ -1,0 +1,5 @@
+FACTURA A
+Numero: 1
+6x   Arroz Largo Fino 1kg  $7956.00
+TOTAL: $7956.00
+CAE: 53203664437131

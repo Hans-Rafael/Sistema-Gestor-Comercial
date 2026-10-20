@@ -3,27 +3,19 @@
 #include <string>
 using namespace std;
 
-Factura::Factura(Venta *v, int n, double t, string c, string qr) {
+Factura::Factura(Venta *v, int n, double t, string c) {
     venta = v;
     numero = n;
     total = t;
     cae = c;
-    textoQR = qr;
 }
 
 string Factura::armarTexto() {
     string texto = "";
-    
-    // Encabezado con tipo de factura en carácter
-    texto += "========================================\n";
-    texto += "            FACTURA " + string(1, getTipo()) + "\n";
-    texto += "========================================\n";
-    texto += "Nro. Comprobante: " + to_string(numero) + "\n";
-    texto += "----------------------------------------\n";
-    texto += "CANT  PRODUCTO             SUBTOTAL\n";
-    texto += "----------------------------------------\n";
+    texto += "FACTURA " + string(1, getTipo()) + "\n";
+    texto += "Numero: " + to_string(numero) + "\n";
 
-    // 1. Mostrar ítems
+    // 1. Mostrar ítems de la venta
     if (venta != NULL) {
         for (int i = 0; i < venta->getCantidadTotalItems(); i++) {
             Producto *p = venta->getProductoItem(i);
@@ -49,12 +41,8 @@ string Factura::armarTexto() {
     if (decTotal.length() < 2) decTotal = "0" + decTotal;
     string totalFormateado = to_string(centavosTotal / 100) + "." + decTotal;
 
-    // Pie
-    texto += "----------------------------------------\n";
+    // Pie de la factura
     texto += "TOTAL: $" + totalFormateado + "\n";
     texto += "CAE: " + cae + "\n";
-    texto += "QR: " + textoQR + "\n";
-    texto += "========================================\n";
-
     return texto;
 }
