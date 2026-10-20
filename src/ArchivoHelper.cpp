@@ -33,7 +33,8 @@ int cargarProductos(Inventario& inv) {
     double precio, iva;
     int minimo, cantidad;
     int leidos = 0;
-    while (getline(archivoP, codigo, ';')) {
+    // >> ws salta las lineas en blanco (por ejemplo, una al final del archivo)
+    while (archivoP >> ws && getline(archivoP, codigo, ';')) {
         getline(archivoP, nombre, ';');
         archivoP >> precio;
         archivoP.ignore(1);
@@ -41,18 +42,28 @@ int cargarProductos(Inventario& inv) {
         archivoP.ignore(1);
         archivoP >> minimo;
         archivoP.ignore(1); // salta el Enter
-        inv.agregarProducto(new Producto(codigo, nombre, precio, iva, minimo));
-        leidos++;
+        Producto *p = new Producto(codigo, nombre, precio, iva, minimo);
+        if (inv.agregarProducto(p)) {
+            leidos++;
+        } else {
+            // el inventario esta lleno: avisa y libera, para no perder el producto sin aviso
+            cout << "[ADVERTENCIA] Inventario lleno: no se cargo el producto " << codigo << endl;
+            delete p;
+        }
     }
     archivoP.close();
 
     ifstream archivoL("lotes.txt");
-    while (getline(archivoL, codigo, ';')) {
+    while (archivoL >> ws && getline(archivoL, codigo, ';')) {
         getline(archivoL, fecha, ';');
         archivoL >> cantidad;
         archivoL.ignore(1);
         Producto *p = inv.buscarProducto(codigo);
-        if (p != NULL) p->agregarLote(fecha, cantidad);
+        if (p != NULL) {
+            p->agregarLote(fecha, cantidad);
+        } else {
+            cout << "[ADVERTENCIA] Lote de un producto inexistente (" << codigo << "), se ignora" << endl;
+        }
     }
     archivoL.close();
     return leidos;
