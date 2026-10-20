@@ -58,22 +58,21 @@ int cargarProductos(Inventario& inv) {
     return leidos;
 }
 
-bool guardarArrayProductosEnTxt(Inventario& inv, string nombreArchivo) {
+bool guardarArrayProductos(Inventario& inv, string nombreArchivo) {
     ofstream archivo(nombreArchivo.c_str());
     if (!archivo) return false;
 
     archivo.setf(ios::fixed);
     archivo.precision(2);
-    archivo << "=========================================================" << endl;
     archivo << "             LISTADO DE PRODUCTOS EN INVENTARIO          " << endl;
     archivo << "=========================================================" << endl;
     for (int i = 0; i < inv.getCantidad(); i++) {
         Producto *p = inv.getProducto(i);
         archivo << "Codigo: " << p->getCodigoBarras()
-                << " | Nombre: " << p->getNombre()
-                << " | Precio base: $" << p->getPrecioBase()
-                << " | IVA: " << p->getPorcentajeIVA() << "%"
-                << " | Stock total: " << inv.stockTotal(p, fechaHoy());
+                << " -- Producto: " << p->getNombre()
+                << " -- Precio base: $" << p->getPrecioBase()
+                << " -- IVA: " << p->getPorcentajeIVA() << "%"
+                << " -- Stock total: " << inv.stockTotal(p, fechaHoy());
         if (inv.esStockCritico(p, fechaHoy())) archivo << " [ADVERTENCIA: Stock Critico]";
         archivo << endl;
     }

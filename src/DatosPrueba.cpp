@@ -31,6 +31,7 @@ void cargarDatosDePrueba(Inventario& inv) {
 }
 
 void cargarUsuariosDePrueba(Auth& auth) {
-    auth.agregarUsuario(new Encargado("encargado", "1234"));
-    auth.agregarUsuario(new Cajero("cajero", "1234"));
+    auth.agregarUsuario(new Encargado("juan", "4321"));
+    auth.agregarUsuario(new Cajero("cajero1", "1234"));
+    auth.agregarUsuario(new Cajero("cajero2", "5678"));
 }

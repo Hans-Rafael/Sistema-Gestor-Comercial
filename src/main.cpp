@@ -11,7 +11,7 @@
 #include "ArchivoHelper.h"
 using namespace std;
 
-void mostrarMenu()
+void Menu()
 {
     cout << "===== GESTOR DE NEGOCIO =====" << endl;
     cout << "1. Nueva venta" << endl;
@@ -59,13 +59,14 @@ int main()
         if (usuario == NULL)
             cout << "Usuario o clave incorrectos" << endl;
     }
-    cout << "Bienvenido " << usuario->getNombre() << " (" << usuario->getRol() << ")" << endl;
+    cout << "\nBienvenido " << usuario->getNombre() << " (" << usuario->getRol() << ")\n"
+         << endl;
     caja.abrir(leerDouble("Monto de apertura: ", 0));
-
+    cout << endl;
     int opcion;
     do
     {
-        mostrarMenu();
+        Menu();
         opcion = leerEntero("Opcion: ", 0, 8);
         switch (opcion)
         {

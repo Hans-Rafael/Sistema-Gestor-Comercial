@@ -13,6 +13,6 @@ void guardarProductos(Inventario& inv);
 int cargarProductos(Inventario& inv);
 
 // escribe el listado de productos (como se ve en pantalla) en un .txt; false si no se pudo crear
-bool guardarArrayProductosEnTxt(Inventario& inv, string nombreArchivo);
+bool guardarArrayProductos(Inventario& inv, string nombreArchivo);
 
 #endif

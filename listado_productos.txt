@@ -1,0 +1,9 @@
+             LISTADO DE PRODUCTOS EN INVENTARIO          
+=========================================================
+Codigo: 7791234567 -- Producto: Leche Entera 1L -- Precio base: $1000.00 -- IVA: 21.00% -- Stock total: 8 [ADVERTENCIA: Stock Critico]
+Codigo: 7791234568 -- Producto: Pan Lactal -- Precio base: $1500.00 -- IVA: 10.50% -- Stock total: 0 [ADVERTENCIA: Stock Critico]
+Codigo: 7791234569 -- Producto: Yogur Natural 190g -- Precio base: $800.00 -- IVA: 21.00% -- Stock total: 20
+Codigo: 7791234570 -- Producto: Arroz Largo Fino 1kg -- Precio base: $1200.00 -- IVA: 10.50% -- Stock total: 30
+Codigo: 7791234571 -- Producto: Galletitas Dulces 300g -- Precio base: $900.00 -- IVA: 21.00% -- Stock total: 7
+=========================================================
+Total de productos listados: 5
