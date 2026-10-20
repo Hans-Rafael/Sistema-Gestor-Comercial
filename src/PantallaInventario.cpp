@@ -16,6 +16,7 @@ void mostrarProducto(Inventario& inv, Producto *p) {
 }
  
 void pantallaListar(Inventario& inv) {            // opcion 6
+    limpiarPantalla();
     if (inv.getCantidad() == 0) { cout << "No hay productos" << endl; return; }
     cout << "  Codigo   |-->  Producto  |-->  Precio base + IVA  |-->  Stock total\n" << endl;
     for (int i = 0; i < inv.getCantidad(); i++) mostrarProducto(inv, inv.getProducto(i));
@@ -24,6 +25,8 @@ void pantallaListar(Inventario& inv) {            // opcion 6
         if (guardarArrayProductos(inv, "listado_productos.txt")) cout << "Listado guardado en listado_productos.txt" << endl;
         else cout << "[ERROR] No se pudo crear listado_productos.txt" << endl;
     }
+    pausar();
+    limpiarPantalla();
 }
  
 void pantallaBuscar(Inventario& inv) {            // opcion 7

@@ -61,9 +61,9 @@ int cargarProductos(Inventario& inv) {
 bool guardarArrayProductos(Inventario& inv, string nombreArchivo) {
     ofstream archivo(nombreArchivo.c_str());
     if (!archivo) return false;
-
+    //.setf es para formatear la salida, en este caso para que los precios tengan dos decimales fijos
     archivo.setf(ios::fixed);
-    archivo.precision(2);
+    archivo.precision(2);// precios con dos decimales fijos, para no perder centavos al leer
     archivo << "             LISTADO DE PRODUCTOS EN INVENTARIO          " << endl;
     archivo << "=========================================================" << endl;
     for (int i = 0; i < inv.getCantidad(); i++) {

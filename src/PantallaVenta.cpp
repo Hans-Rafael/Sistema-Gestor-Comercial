@@ -146,4 +146,6 @@ Factura *factura = NULL;
     }
     delete factura;
     cout << "\nVenta realizada con exito!" << endl;
+    pausar();
+    limpiarPantalla();
 }

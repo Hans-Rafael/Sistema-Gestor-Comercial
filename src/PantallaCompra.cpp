@@ -6,10 +6,13 @@
 #include "Pantalla.h"
 using namespace std;
 
-void pantallaCompra(Inventario& inv) {   // opcion 2: recibir mercaderia como lote
+void pantallaCompra(Inventario &inv)
+{ // opcion 2: recibir mercaderia como lote
     string codigo = leerLinea("Codigo de barras: ");
     Producto *p = inv.buscarProducto(codigo);
-    if (p == NULL) {
+    limpiarPantalla();
+    if (p == NULL)
+    {
         cout << "Producto inexistente" << endl;
         return;
     }
@@ -18,19 +21,25 @@ void pantallaCompra(Inventario& inv) {   // opcion 2: recibir mercaderia como lo
 
     // repite hasta tener una fecha valida y que no este ya vencida
     string venc = "";
-    while (venc == "") {
+    while (venc == "")
+    {
         venc = convertirFecha(leerLinea("Vencimiento (DD/MM/AAAA): "));
-        if (venc == "") {
+        if (venc == "")
+        {
             cout << "Fecha invalida" << endl;
-        } else if (compararFechas(venc, fechaHoy()) < 0) {
+        }
+        else if (compararFechas(venc, fechaHoy()) < 0)
+        {
             cout << "La fecha ya paso" << endl;
             venc = "";
         }
     }
 
-    if (!p->agregarLote(venc, cant)) {
+    if (!p->agregarLote(venc, cant))
+    {
         cout << "No hay lugar para mas lotes de este producto" << endl;
         return;
     }
     cout << "Lote cargado (vence " << venc << "). Stock actual: " << inv.stockTotal(p, fechaHoy()) << endl;
+    
 }
