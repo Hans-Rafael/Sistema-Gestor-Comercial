@@ -5,6 +5,7 @@
 #include "Fechas.h"
 #include "Validaciones.h"
 #include "Pantalla.h"
+#include "Exportador.h"
 using namespace std;
 
 void pantallaAlertas(Inventario& inv) {   // opcion 3: consola de alertas
@@ -46,6 +47,11 @@ void pantallaAlertas(Inventario& inv) {   // opcion 3: consola de alertas
         }
     }
     if (criticos == 0) cout << "No hay productos con stock critico" << endl;
+
+    if (leerEntero("\nExportar la lista de lotes a alertas.csv? (1 = Si, 0 = No): ", 0, 1) == 1) {
+        if (exportarAlertasCSV(inv, "alertas.csv")) cout << "Archivo alertas.csv generado." << endl;
+        else cout << "No se pudo crear alertas.csv" << endl;
+    }
 
     pausar();
 }
