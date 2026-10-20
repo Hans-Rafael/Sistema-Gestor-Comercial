@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "Venta.h"
-#include "Tipos.h"
 
 using namespace std;
 
@@ -19,20 +18,23 @@ protected:
 public:
     Factura(Venta *v, int n, double t, string c, string qr);
     virtual ~Factura() {}
-    virtual char getTipo();
+
+    virtual char getTipo() { return '?'; }
     virtual string armarTexto();
 };
 
 class FacturaA : public Factura {
 public:
-    FacturaA(Venta *v, int n, double t, string c, string qr);
-    char getTipo() override;
+    FacturaA(Venta *v, int n, double t, string c, string qr) 
+        : Factura(v, n, t, c, qr) {}
+    char getTipo() { return 'A'; }
 };
 
 class FacturaB : public Factura {
 public:
-    FacturaB(Venta *v, int n, double t, string c, string qr);
-    char getTipo() override;
+    FacturaB(Venta *v, int n, double t, string c, string qr) 
+        : Factura(v, n, t, c, qr) {}
+    char getTipo() { return 'B'; }
 };
 
 #endif

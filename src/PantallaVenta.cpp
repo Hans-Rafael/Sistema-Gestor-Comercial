@@ -1,83 +1,133 @@
 // Autor: Integrante 3
 #include <iostream>
-#include "Inventario.h"
-#include "Venta.h"
-#include "ArcaMock.h"
-#include "Factura.h"
-#include "Fechas.h"
+#include <string>
+#include "Pantalla.h"
 #include "Validaciones.h"
-#include "Tipos.h"
+#include "Venta.h"
+#include "Factura.h"
+#include "ArcaMock.h"
 #include "Caja.h"
+#include "Fechas.h"
+#include "Inventario.h"
 
 using namespace std;
 
-void pantallaVenta(Inventario &inventario, Caja &caja) {
+static int proximoNumeroFactura = 1;
+
+void pantallaVenta(Inventario& inventario, Caja& caja) {
     limpiarPantalla();
-    cout << "=== MODULO DE VENTAS ===" << endl;
+    cout << "========================================" << endl;
+    cout << "               NUEVA VENTA              " << endl;
+    cout << "========================================" << endl;
 
-    int condicion = leerEntero("Condicion cliente (0: Consumidor Final, 1: Resp Inscripto, 2: Monotributo): ", 0, 2);
-    Venta venta(condicion, EFECTIVO);
+    // Menú vertical para la condición fiscal
+    cout << "Condicion del cliente:" << endl;
+    cout << "  0 = Consumidor Final" << endl;
+    cout << "  1 = Responsable Inscripto" << endl;
+    cout << "  2 = Monotributo" << endl;
+    int condicion = leerEntero("Ingrese una opcion: ", 0, 2);
+    
+    Venta venta(condicion);
 
-    char continuar = 's';
-    while (continuar == 's' || continuar == 'S') {
-        string codigo = leerLinea("Ingrese codigo de barras del producto (10 digitos): ");
+    bool agregando = true;
+    while (agregando) {
+        string codigo = leerLinea("Ingrese codigo de barras (10 digitos) [0 para terminar]: ");
+        if (codigo == "0") break;
+
         Producto *p = inventario.buscarProducto(codigo);
-
         if (p == NULL) {
-            cout << "Producto no encontrado." << endl;
-        } else {
-            cout << "Producto: " << p->getNombre() << endl;
-            int cantidad = leerEntero("Ingrese cantidad a vender: ", 1, 1000);
-
-            if (inventario.descontarFEFO(p, cantidad, fechaHoy())) {
-                venta.agregarItem(p, cantidad);
-                cout << "Item agregado al carrito y stock descontado con FEFO." << endl;
-
-                if (inventario.esStockCritico(p, fechaHoy())) {
-                    cout << "[ADVERTENCIA: Stock Critico]" << endl;
-                }
-            } else {
-                cout << "Stock insuficiente o lotes vencidos." << endl;
-            }
+            cout << "[ERROR] Producto no encontrado." << endl;
+            continue;
         }
 
-        cout << "Desea agregar otro producto? (s/n): ";
-        cin >> continuar;
-        cin.ignore(10000, '\n');
+        int stockDisponible = inventario.stockTotal(p, fechaHoy());
+        cout << "Producto: " << p->getNombre() << " | Stock disponible: " << stockDisponible << endl;
+
+        if (stockDisponible <= 0) {
+            cout << "[ERROR] Producto sin stock disponible." << endl;
+            continue;
+        }
+
+        int cantidad = leerEntero("Cantidad a llevar: ", 1, stockDisponible);
+
+        // controlar el carrito antes de tocar el stock: si no hay lugar, no queda stock descontado sin item
+        if (venta.getCantidadTotalItems() >= MAX_ITEMS_VENTA) {
+            cout << "[ERROR] El carrito esta lleno." << endl;
+            agregando = false;
+            continue;
+        }
+
+        // FEFO primero: si no se puede descontar, el item no entra al carrito
+        if (!inventario.descontarFEFO(p, cantidad, fechaHoy())) {
+            cout << "[ERROR] No se pudo descontar el stock (lotes vencidos o insuficientes)." << endl;
+            continue;
+        }
+        venta.agregarItem(p, cantidad); // no falla: la capacidad se controlo arriba
+
+        if (inventario.esStockCritico(p, fechaHoy())) {
+            cout << "[ADVERTENCIA: Stock Critico]" << endl;
+        }
+
+        int seguir = leerEntero("Agregar otro producto? (1 = Si, 0 = No): ", 0, 1);
+        if (seguir == 0) agregando = false;
     }
 
-    if (venta.getCantItems() > 0) {
-        int medioPago = leerEntero("Medio de pago (0: Efectivo, 1: Tarjeta, 2: Transferencia): ", 0, 2);
-        venta.setMedioPago(medioPago);
+    if (venta.getCantidadTotalItems() == 0) {
+        cout << "Venta cancelada (carrito vacio)." << endl;
+        return;
+    }
 
-        double total = venta.total();
-        static int ultimoNumero = 0; // numeracion de facturas durante la sesion
-        int numero = ++ultimoNumero;
+    double totalVenta = venta.calcularTotal();
 
-        string cae = ArcaMock::generarCAE();
-        string qr = ArcaMock::generarTextoQR(venta.tipoComprobante(), numero, total, cae);
+    long centavos = (long)(totalVenta * 100 + 0.5);
+    string dec = to_string(centavos % 100);
+    if (dec.length() < 2) dec = "0" + dec;
+    cout << "\nTotal a pagar: $" << to_string(centavos / 100) << "." << dec << endl;
 
-        Factura *f;
-        if (venta.tipoComprobante() == 'A') {
-            f = new FacturaA(&venta, numero, total, cae, qr);
-        } else {
-            f = new FacturaB(&venta, numero, total, cae, qr);
+    // Menú vertical para el medio de pago
+    cout << "\nMedio de pago:" << endl;
+    cout << "  0 = Efectivo" << endl;
+    cout << "  1 = Tarjeta" << endl;
+    cout << "  2 = Transferencia" << endl;
+    int medioPago = leerEntero("Ingrese una opcion: ", 0, 2);
+
+    double vuelto = 0.0;
+    if (medioPago == 0) { // Efectivo
+        double abonado = leerDouble("Monto entregado por el cliente: $", 0.01);
+
+        // Validar pago no menor al total
+        while (abonado < totalVenta) {
+            cout << "[ERROR] El monto entregado es menor al total ($" << to_string(centavos / 100) << "." << dec << ")." << endl;
+            abonado = leerDouble("Ingrese un monto valido: $", 0.01);
         }
 
-        limpiarPantalla();
-        cout << f->armarTexto() << endl;
+        vuelto = abonado - totalVenta;
+        caja.registrarVentaEfectivo(totalVenta);
+    }
 
-        if (medioPago == EFECTIVO) {
-            double pagoCon = leerDouble("Efectivo con el que paga: ", total); // no puede ser menor al total
-            cout << "Vuelto: $" << (pagoCon - total) << endl;
-            caja.registrarVentaEfectivo(total);
-        }
+    // Numero de factura incremental
+    int numFacturaActual = proximoNumeroFactura++;
+    string cae = ArcaMock::generarCAE();
+    char tipoComp = venta.tipoComprobante();
+    string qr = ArcaMock::generarTextoQR(tipoComp, numFacturaActual, totalVenta, cae);
 
-        delete f;
+    Factura *factura = NULL;
+    if (tipoComp == 'A') {
+        factura = new FacturaA(&venta, numFacturaActual, totalVenta, cae, qr);
     } else {
-        cout << "No se registraron ventas." << endl;
+        factura = new FacturaB(&venta, numFacturaActual, totalVenta, cae, qr);
     }
 
-    cout << "\nPresione Enter para volver al menu...";
-    cin.get();
+    limpiarPantalla();
+    cout << factura->armarTexto() << endl;
+
+    if (medioPago == 0) {
+        long cVuelto = (long)(vuelto * 100 + 0.5);
+        string decVuelto = to_string(cVuelto % 100);
+        if (decVuelto.length() < 2) decVuelto = "0" + decVuelto;
+        cout << "Vuelto al cliente: $" << to_string(cVuelto / 100) << "." << decVuelto << endl;
+    }
+
+    delete factura;
+    cout << "\nVenta realizada con exito!" << endl;
 }

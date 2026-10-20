@@ -1,10 +1,21 @@
 // Autor: Integrante 3
-#include <iostream>
 #include "Venta.h"
+
 using namespace std;
 
+Venta::Venta(int condicion) {
+    cantItems = 0;
+    condicionCliente = condicion;
+    for (int i = 0; i < MAX_ITEMS_VENTA; i++) {
+        productos[i] = NULL;
+        cantidades[i] = 0;
+    }
+}
+
 bool Venta::agregarItem(Producto *p, int cantidad) {
-    if (p == NULL || cantidad <= 0 || cantItems >= MAX_ITEMS_CARRITO) return false;
+    if (p == NULL || cantidad <= 0 || cantItems >= MAX_ITEMS_VENTA) {
+        return false;
+    }
     productos[cantItems] = p;
     cantidades[cantItems] = cantidad;
     cantItems++;
@@ -12,23 +23,24 @@ bool Venta::agregarItem(Producto *p, int cantidad) {
 }
 
 double Venta::precioConIVA(Producto *p) {
-    return p->getPrecioBase() * (1 + p->getPorcentajeIVA() / 100.0);
+    if (p == NULL) return 0.0;
+    return p->getPrecioBase() * (1.0 + (p->getPorcentajeIVA() / 100.0));
+}
+
+double Venta::subtotalItem(int i) {
+    if (i < 0 || i >= cantItems || productos[i] == NULL) return 0.0;
+    return precioConIVA(productos[i]) * cantidades[i];
+}
+
+double Venta::calcularTotal() {
+    double total = 0.0;
+    for (int i = 0; i < cantItems; i++) {
+        total += subtotalItem(i);
+    }
+    return total;
 }
 
 char Venta::tipoComprobante() {
     if (condicionCliente == CONSUMIDOR_FINAL) return 'B';
-    return 'A';   // Responsable Inscripto o Monotributo
-}
-
-double Venta::subtotalItem(int idx) {
-    if (idx < 0 || idx >= cantItems) return 0;
-    return precioConIVA(productos[idx]) * cantidades[idx];
-}
-
-double Venta::total() {
-    double suma = 0;
-    for (int i = 0; i < cantItems; i++) {
-        suma += subtotalItem(i);
-    }
-    return suma;
+    return 'A'; // Responsable Inscripto o Monotributo
 }
