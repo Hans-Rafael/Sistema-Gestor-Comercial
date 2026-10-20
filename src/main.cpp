@@ -15,13 +15,13 @@ void Menu()
 {
     cout << "===== GESTOR DE NEGOCIO =====" << endl;
     cout << "1. Nueva venta" << endl;
-    cout << "2. Ingresar compra / lote" << endl;
-    cout << "3. Consola de alertas" << endl;
-    cout << "4. Movimientos de caja" << endl;
-    cout << "5. Cierre de caja" << endl;
+    cout << "2. Cierre de caja" << endl;
+    cout << "3. Movimientos de caja" << endl;
+    cout << "4. Alta de producto" << endl;
+    cout << "5. Ingresar compra / lote" << endl;
     cout << "6. Listar productos" << endl;
     cout << "7. Buscar producto" << endl;
-    cout << "8. Alta de producto" << endl;
+    cout << "8. Consola de alertas" << endl;
     cout << "0. Salir" << endl;
 }
 
@@ -74,16 +74,16 @@ int main()
             pantallaVenta(inventario, caja);
             break;
         case 2:
-            pantallaCompra(inventario);
+            pantallaCierreCaja(caja);
             break;
         case 3:
-            pantallaAlertas(inventario);
-            break;
-        case 4:
             pantallaMovimientosCaja(caja);
             break;
+        case 4:
+            pantallaAltaProducto(inventario);
+            break;
         case 5:
-            pantallaCierreCaja(caja);
+            pantallaCompra(inventario);
             break;
         case 6:
             pantallaListar(inventario);
@@ -92,7 +92,7 @@ int main()
             pantallaBuscar(inventario);
             break;
         case 8:
-            pantallaAltaProducto(inventario);
+            pantallaAlertas(inventario);
             break;
         case 0:
             cout << "Hasta luego" << endl;
