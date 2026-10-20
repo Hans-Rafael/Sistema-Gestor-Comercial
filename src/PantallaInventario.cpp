@@ -30,6 +30,7 @@ void pantallaListar(Inventario& inv) {            // opcion 6
 }
  
 void pantallaBuscar(Inventario& inv) {            // opcion 7
+    limpiarPantalla();
     int modo = leerEntero("Buscar por 1) codigo  2) nombre: ", 1, 2);
     if (modo == 1) {
         Producto *p = inv.buscarProducto(leerLinea("Codigo: "));
@@ -44,6 +45,7 @@ void pantallaBuscar(Inventario& inv) {            // opcion 7
             i = inv.buscarPorNombre(texto, i + 1);
         }
     }
+    pausar();
 }
  
 void pantallaAltaProducto(Inventario& inv) {      // opcion 8
