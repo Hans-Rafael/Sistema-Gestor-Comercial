@@ -13,10 +13,9 @@ protected:
     int numero;
     double total;
     string cae;
-    string textoQR;
 
 public:
-    Factura(Venta *v, int n, double t, string c, string qr);
+    Factura(Venta *v, int n, double t, string c);
     virtual ~Factura() {}
 
     virtual char getTipo() { return '?'; }
@@ -25,15 +24,15 @@ public:
 
 class FacturaA : public Factura {
 public:
-    FacturaA(Venta *v, int n, double t, string c, string qr) 
-        : Factura(v, n, t, c, qr) {}
+    FacturaA(Venta* venta, int numero, double total, string cae)
+        : Factura(venta, numero, total, cae) {}
     char getTipo() { return 'A'; }
 };
 
 class FacturaB : public Factura {
 public:
-    FacturaB(Venta *v, int n, double t, string c, string qr) 
-        : Factura(v, n, t, c, qr) {}
+    FacturaB(Venta *v, int n, double t, string c) 
+        : Factura(v, n, t, c) {}
     char getTipo() { return 'B'; }
 };
 

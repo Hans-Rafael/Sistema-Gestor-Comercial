@@ -33,7 +33,7 @@ int main() {
     verificar(qr == "ARCA-QR|Factura B|Nro 00000001|Total 2475.50|CAE " + cae, "texto QR con formato");
 
     // herencia y virtual con Factura*
-    Factura *f = new FacturaA(&va, 7, 100.5, cae, qr);
+    Factura *f = new FacturaA(&va, 7, 100.5, cae);
     verificar(f->getTipo() == 'A', "virtual getTipo via puntero base");
     string txt = f->armarTexto();
     verificar(txt.find("FACTURA A") != string::npos, "armarTexto usa la clase derivada");
