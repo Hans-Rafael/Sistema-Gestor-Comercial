@@ -13,6 +13,6 @@ void mostrarMarco(string titulo) {
     cout << linea << endl;
 }
 
-string conColor(string texto, string color) {
+string Color(string texto, string color) {
     return color + texto + COLOR_RESET;
 }

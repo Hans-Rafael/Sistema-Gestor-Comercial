@@ -27,8 +27,8 @@ void pantallaAlertas(Inventario& inv) {   // opcion 3: consola de alertas
             string texto = p->getNombre() + " | vence " + l->getFechaVencimiento()
                          + " | cant: " + to_string(l->getCantidad())
                          + " | " + alertas.nombreEstado(estado);
-            if (estado == VENCIDO || estado == CRITICO) cout << conColor(texto, COLOR_ROJO) << endl;
-            else cout << conColor(texto, COLOR_AMARILLO) << endl;
+            if (estado == VENCIDO || estado == CRITICO) cout << Color(texto, COLOR_ROJO) << endl;
+            else cout << Color(texto, COLOR_AMARILLO) << endl;
             avisos++;
         }
     }
@@ -42,7 +42,7 @@ void pantallaAlertas(Inventario& inv) {   // opcion 3: consola de alertas
         if (inv.esStockCritico(p, fechaHoy())) {
             string texto = p->getNombre() + " | stock: " + to_string(inv.stockTotal(p, fechaHoy()))
                          + " (minimo " + to_string(p->getStockMinimo()) + ")";
-            cout << conColor(texto, COLOR_ROJO) << endl;
+            cout << Color(texto, COLOR_ROJO) << endl;
             criticos++;
         }
     }
