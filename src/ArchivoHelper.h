@@ -12,4 +12,7 @@ void guardarProductos(Inventario& inv);
 // devuelve cuantos productos leyo (0 si no hay archivo o esta vacio)
 int cargarProductos(Inventario& inv);
 
+// escribe el listado de productos (como se ve en pantalla) en un .txt; false si no se pudo crear
+bool guardarArrayProductosEnTxt(Inventario& inv, string nombreArchivo);
+
 #endif
