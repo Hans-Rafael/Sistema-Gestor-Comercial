@@ -6,7 +6,7 @@
 #include "Inventario.h"
 using namespace std;
 
-// Persistencia opcional (guia seccion 9): productos.txt y lotes.txt, separados por ';'
+// Persistencia opcional productos.txt y lotes.txt, separados por ';'
 void guardarProductos(Inventario& inv);
 
 // devuelve cuantos productos leyo (0 si no hay archivo o esta vacio)
