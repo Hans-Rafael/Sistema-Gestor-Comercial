@@ -15,15 +15,15 @@ int main() {
     Producto leche("1122334451", "Leche", 1000.00, 21.0, 10);
     Producto pan("1122334452", "Pan", 1500.00, 10.5, 5);
 
-    Venta v(CONSUMIDOR_FINAL, EFECTIVO);
+    Venta v(CONSUMIDOR_FINAL);
     verificar(v.agregarItem(&leche, 2), "agregarItem");
     verificar(v.agregarItem(&pan, 1), "agregarItem segundo producto");
     verificar(!v.agregarItem(&pan, 0), "agregarItem rechaza cantidad 0");
     verificar(v.precioConIVA(&leche) > 1209.99 && v.precioConIVA(&leche) < 1210.01, "precio con IVA 21%");
-    verificar(v.total() > 4077.49 && v.total() < 4077.51, "total 2 leche + 1 pan");
+    verificar(v.calcularTotal() > 4077.49 && v.calcularTotal() < 4077.51, "total 2 leche + 1 pan");
     verificar(v.tipoComprobante() == 'B', "consumidor final -> factura B");
 
-    Venta va(RESPONSABLE_INSCRIPTO, TARJETA);
+    Venta va(RESPONSABLE_INSCRIPTO);
     verificar(va.tipoComprobante() == 'A', "responsable inscripto -> factura A");
 
     // ArcaMock
@@ -37,7 +37,7 @@ int main() {
     verificar(f->getTipo() == 'A', "virtual getTipo via puntero base");
     string txt = f->armarTexto();
     verificar(txt.find("FACTURA A") != string::npos, "armarTexto usa la clase derivada");
-    verificar(txt.find("Total: $100.50") != string::npos, "monto con dos decimales");
+    verificar(txt.find("TOTAL: $100.50") != string::npos, "monto con dos decimales");
     delete f;
 
     cout << (fallas == 0 ? "\nTODO OK" : "\nHAY FALLAS") << endl;
