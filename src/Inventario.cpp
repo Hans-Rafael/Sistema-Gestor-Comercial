@@ -94,13 +94,20 @@ bool Inventario::esStockCritico(Producto *p, string hoy)
 }
 
 // auxiliar: devuelve true si nombre contiene texto (sin usar find ni regex)
+// pasa a minuscula una letra (sin <cctype>, que no esta permitido)
+char aMinuscula(char c) {
+    if (c >= 'A' && c <= 'Z') return c + ('a' - 'A');
+    return c;
+}
+
+// la busqueda ignora mayusculas y minusculas: "ar" encuentra "Arroz"
 bool contieneTexto(string nombre, string texto) {
     int n = nombre.length();
     int t = texto.length();
     for (int i = 0; i + t <= n; i++) {
         bool igual = true;
         for (int j = 0; j < t && igual; j++) {
-            if (nombre[i + j] != texto[j]) igual = false;
+            if (aMinuscula(nombre[i + j]) != aMinuscula(texto[j])) igual = false;
         }
         if (igual) return true;
     }
