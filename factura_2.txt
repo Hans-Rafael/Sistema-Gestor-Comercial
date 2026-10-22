@@ -1,6 +1,0 @@
-FACTURA B
-Numero: 2
-3x   Yogur Natural 190g  $2904.00
-3x   Pan Lactal  $4972.50
-TOTAL: $7876.50
-CAE: 05535532397169

@@ -1,5 +1,0 @@
-FACTURA B
-Numero: 1
-5x   Galletitas Dulces 30  $5445.00
-TOTAL: $5445.00
-CAE: 48518097399100
