@@ -3,6 +3,7 @@
 #include "Venta.h"
 #include "Factura.h"
 #include "ArcaMock.h"
+#include "Validaciones.h"
 using namespace std;
 
 int fallas = 0;
@@ -34,13 +35,28 @@ int main() {
     string qr = ArcaMock::generarTextoQR('B', 1, 2475.5, cae);
     verificar(qr == "ARCA-QR|Factura B|Nro 00000001|Total 2475.50|CAE " + cae, "texto QR con formato");
 
+    // CUIT
+    verificar(cuitValido("20-12345678-6"), "CUIT valido con guiones");
+    verificar(cuitValido("20123456786"), "CUIT valido sin guiones");
+    verificar(!cuitValido("20-12345678-5"), "CUIT con digito verificador incorrecto");
+    verificar(!cuitValido("20-1234567-5"), "CUIT con menos de 11 digitos");
+    verificar(cuitValido(EMISOR_CUIT), "CUIT del emisor es valido");
+
     // herencia y virtual con Factura*
     Factura *f = new FacturaA(&va, 7, 100.5, cae);
     verificar(f->getTipo() == 'A', "virtual getTipo via puntero base");
     string txt = f->armarTexto();
     verificar(txt.find("FACTURA A") != string::npos, "armarTexto usa la clase derivada");
     verificar(txt.find("TOTAL: $100.50") != string::npos, "monto con dos decimales");
+    verificar(txt.find("CUIT emisor: " + EMISOR_CUIT) != string::npos, "factura A muestra CUIT del emisor");
+    verificar(txt.find("Razon social: " + EMISOR_RAZON_SOCIAL) != string::npos, "factura A muestra razon social");
     delete f;
+
+    Factura *fa2 = new FacturaA(&v, 10, v.calcularTotal(), cae, "20-12345678-6");
+    string txtA = fa2->armarTexto();
+    verificar(txtA.find("CUIT cliente: 20-12345678-6") != string::npos, "factura A muestra CUIT del cliente");
+    verificar(txtA.find("Precio neto: $3500.00") != string::npos, "factura A muestra precio neto");
+    delete fa2;
 
     // régimen de transparencia solo en factura B
     Factura *fb = new FacturaB(&v, 8, v.calcularTotal(), cae);

@@ -45,6 +45,13 @@ void pantallaVenta(Inventario &inventario, Caja &caja)
     cout << "  2 = Monotributo" << endl;
     int condicion = leerEntero("Ingrese una opcion: ", 0, 2);
 
+    // Factura A (RI o Monotributo como cliente) exige CUIT del cliente
+    string cuitCliente = "";
+    if (condicion != CONSUMIDOR_FINAL)
+    {
+        cuitCliente = leerCUIT("Ingrese CUIT del cliente (11 digitos): ");
+    }
+
     Venta venta(condicion);
 
     bool agregando = true;
@@ -143,7 +150,7 @@ void pantallaVenta(Inventario &inventario, Caja &caja)
     Factura *factura = NULL;
     if (tipoComp == 'A')
     {
-        factura = new FacturaA(&venta, numFacturaActual, totalVenta, cae);
+        factura = new FacturaA(&venta, numFacturaActual, totalVenta, cae, cuitCliente);
     }
     else
     {
