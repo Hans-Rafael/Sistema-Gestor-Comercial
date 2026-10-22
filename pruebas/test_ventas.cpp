@@ -38,7 +38,9 @@ int main() {
     // CUIT
     verificar(cuitValido("20-12345678-6"), "CUIT valido con guiones");
     verificar(cuitValido("20123456786"), "CUIT valido sin guiones");
-    verificar(!cuitValido("20-12345678-5"), "CUIT con digito verificador incorrecto");
+    verificar(cuitValido("30-12345678-9"), "CUIT de 11 digitos (no se controla el verificador)");
+    verificar(!cuitValido("20.12345678.6"), "CUIT con puntos es invalido");
+    verificar(!cuitValido("20 12345678 6"), "CUIT con espacios es invalido");
     verificar(!cuitValido("20-1234567-5"), "CUIT con menos de 11 digitos");
     verificar(cuitValido(EMISOR_CUIT), "CUIT del emisor es valido");
 

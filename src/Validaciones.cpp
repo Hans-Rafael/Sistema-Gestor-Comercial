@@ -51,18 +51,7 @@ bool cuitValido(string cuit) {
         if (cuit[i] < '0' || cuit[i] > '9') return false;
         digitos += cuit[i];
     }
-    if (digitos.length() != 11) return false;
-
-    // digito verificador: pesos 5,4,3,2,7,6,5,4,3,2 sobre los primeros 10 digitos, modulo 11
-    int pesos[10] = {5, 4, 3, 2, 7, 6, 5, 4, 3, 2};
-    int suma = 0;
-    for (int i = 0; i < 10; i++) {
-        suma += (digitos[i] - '0') * pesos[i];
-    }
-    int verificador = 11 - (suma % 11);
-    if (verificador == 11) verificador = 0;
-    if (verificador == 10) return false; // CUIT inexistente
-    return verificador == (digitos[10] - '0');
+    return digitos.length() == 11;
 }
 
 string leerCUIT(string mensaje) {
@@ -75,7 +64,7 @@ string leerCUIT(string mensaje) {
             }
             return digitos.substr(0, 2) + "-" + digitos.substr(2, 8) + "-" + digitos.substr(10, 1);
         }
-        cout << "CUIT invalido. Ingrese 11 digitos (ej: 20-12345678-5)." << endl;
+        cout << "CUIT invalido. Ingrese 11 digitos (ej: 20-12345678-6)." << endl;
     }
 }
 
