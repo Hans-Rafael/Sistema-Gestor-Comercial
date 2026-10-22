@@ -26,6 +26,8 @@ public:
     double subtotalItem(int i);
     double precioConIVA(Producto *p);
     double calcularTotal();
+    double calcularPrecioSinIVA();
+    double calcularIVAContenido(); // IVA incluido en el precio: precio con IVA - precio sin IVA
     char tipoComprobante();
 };
 
