@@ -22,6 +22,9 @@ int main() {
     verificar(v.precioConIVA(&leche) > 1209.99 && v.precioConIVA(&leche) < 1210.01, "precio con IVA 21%");
     verificar(v.calcularTotal() > 4077.49 && v.calcularTotal() < 4077.51, "total 2 leche + 1 pan");
     verificar(v.tipoComprobante() == 'B', "consumidor final -> factura B");
+    verificar(v.calcularIVAContenido() > 577.49 && v.calcularIVAContenido() < 577.51, "IVA contenido 2 leche + 1 pan");
+    leche.setOtrosImpuestos(50.0);
+    verificar(v.calcularOtrosImpuestos() > 99.99 && v.calcularOtrosImpuestos() < 100.01, "otros impuestos 2 leche");
 
     Venta va(RESPONSABLE_INSCRIPTO);
     verificar(va.tipoComprobante() == 'A', "responsable inscripto -> factura A");
@@ -39,6 +42,16 @@ int main() {
     verificar(txt.find("FACTURA A") != string::npos, "armarTexto usa la clase derivada");
     verificar(txt.find("TOTAL: $100.50") != string::npos, "monto con dos decimales");
     delete f;
+
+    // régimen de transparencia solo en factura B
+    Factura *fb = new FacturaB(&v, 8, v.calcularTotal(), cae);
+    string txtB = fb->armarTexto();
+    verificar(txtB.find("IVA Contenido: $577.50") != string::npos, "factura B muestra IVA contenido");
+    verificar(txtB.find("Otros Impuestos Nacionales Indirectos: $100.00") != string::npos, "factura B muestra otros impuestos");
+    delete fb;
+    Factura *fa = new FacturaA(&v, 9, v.calcularTotal(), cae);
+    verificar(fa->armarTexto().find("Transparencia") == string::npos, "factura A no muestra régimen de transparencia");
+    delete fa;
 
     cout << (fallas == 0 ? "\nTODO OK" : "\nHAY FALLAS") << endl;
     return fallas;

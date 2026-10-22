@@ -13,6 +13,7 @@ private:
     string nombre; // Ej: "Leche Entera 1L" (sin ';' adentro)
     double precioBase; // precio SIN IVA. Ej: 1000.00
     double porcentajeIVA; // Ej: 21.0 o 10.5
+    double otrosImpuestos; // otros impuestos nacionales indirectos por unidad. Ej: 0.0
     int stockMinimo; // Ej: 10 (critico si stock <= 10)
     Lote lotes[MAX_LOTES]; // partidas compradas
     int cantLotes; // cuantos lotes hay cargados
@@ -23,6 +24,7 @@ public:
         nombre = "";
         precioBase = 0;
         porcentajeIVA = 21.0;
+        otrosImpuestos = 0;
         stockMinimo = 0;
         cantLotes = 0;
     }
@@ -31,6 +33,7 @@ public:
         nombre = n;
         precioBase = precio;
         porcentajeIVA = iva;
+        otrosImpuestos = 0;
         stockMinimo = minimo;
         cantLotes = 0;
     }
@@ -39,12 +42,14 @@ public:
     string getNombre() { return nombre; }
     double getPrecioBase() { return precioBase; }
     double getPorcentajeIVA() { return porcentajeIVA; }
+    double getOtrosImpuestos() { return otrosImpuestos; }
     int getStockMinimo() { return stockMinimo; }
     int getCantLotes() { return cantLotes; }
 
     void setNombre(string n) { nombre = n; }
     void setPrecioBase(double p) { precioBase = p; }
     void setPorcentajeIVA(double iva) { porcentajeIVA = iva; }
+    void setOtrosImpuestos(double monto) { otrosImpuestos = monto; }
     void setStockMinimo(int m) { stockMinimo = m; }
 
     // devuelve un puntero al lote i (0 a cantLotes-1): los cambios se guardan en el producto

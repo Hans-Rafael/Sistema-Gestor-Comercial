@@ -20,6 +20,7 @@ public:
 
     virtual char getTipo() { return '?'; }
     virtual string armarTexto();
+    static string formatearMonto(double monto);
 };
 
 class FacturaA : public Factura {

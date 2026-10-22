@@ -40,6 +40,22 @@ double Venta::calcularTotal() {
     return total;
 }
 
+double Venta::calcularIVAContenido() {
+    double iva = 0.0;
+    for (int i = 0; i < cantItems; i++) {
+        iva += productos[i]->getPrecioBase() * (productos[i]->getPorcentajeIVA() / 100.0) * cantidades[i];
+    }
+    return iva;
+}
+
+double Venta::calcularOtrosImpuestos() {
+    double otros = 0.0;
+    for (int i = 0; i < cantItems; i++) {
+        otros += productos[i]->getOtrosImpuestos() * cantidades[i];
+    }
+    return otros;
+}
+
 char Venta::tipoComprobante() {
     if (condicionCliente == CONSUMIDOR_FINAL) return 'B';
     return 'A'; // Responsable Inscripto o Monotributo
