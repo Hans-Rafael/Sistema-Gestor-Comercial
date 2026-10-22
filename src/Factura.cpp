@@ -47,8 +47,8 @@ string Factura::armarTexto() {
     // 3. Régimen de transparencia fiscal (Ley 27.743): obligatorio en facturas B (consumidor final)
     if (getTipo() == 'B' && venta != NULL) {
         texto += "Regimen de Transparencia Fiscal al Consumidor (Ley 27.743)\n";
+        texto += "Precio sin IVA: $" + formatearMonto(venta->calcularPrecioSinIVA()) + "\n";
         texto += "IVA Contenido: $" + formatearMonto(venta->calcularIVAContenido()) + "\n";
-        texto += "Otros Impuestos Nacionales Indirectos: $" + formatearMonto(venta->calcularOtrosImpuestos()) + "\n";
     }
 
     texto += "CAE: " + cae + "\n";

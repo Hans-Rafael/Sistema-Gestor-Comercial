@@ -23,8 +23,7 @@ int main() {
     verificar(v.calcularTotal() > 4077.49 && v.calcularTotal() < 4077.51, "total 2 leche + 1 pan");
     verificar(v.tipoComprobante() == 'B', "consumidor final -> factura B");
     verificar(v.calcularIVAContenido() > 577.49 && v.calcularIVAContenido() < 577.51, "IVA contenido 2 leche + 1 pan");
-    leche.setOtrosImpuestos(50.0);
-    verificar(v.calcularOtrosImpuestos() > 99.99 && v.calcularOtrosImpuestos() < 100.01, "otros impuestos 2 leche");
+    verificar(v.calcularPrecioSinIVA() > 3499.99 && v.calcularPrecioSinIVA() < 3500.01, "precio sin IVA 2 leche + 1 pan");
 
     Venta va(RESPONSABLE_INSCRIPTO);
     verificar(va.tipoComprobante() == 'A', "responsable inscripto -> factura A");
@@ -47,7 +46,8 @@ int main() {
     Factura *fb = new FacturaB(&v, 8, v.calcularTotal(), cae);
     string txtB = fb->armarTexto();
     verificar(txtB.find("IVA Contenido: $577.50") != string::npos, "factura B muestra IVA contenido");
-    verificar(txtB.find("Otros Impuestos Nacionales Indirectos: $100.00") != string::npos, "factura B muestra otros impuestos");
+    verificar(txtB.find("Precio sin IVA: $3500.00") != string::npos, "factura B muestra precio sin IVA");
+    verificar(txtB.find("Otros Impuestos") == string::npos, "factura B no muestra otros impuestos");
     delete fb;
     Factura *fa = new FacturaA(&v, 9, v.calcularTotal(), cae);
     verificar(fa->armarTexto().find("Transparencia") == string::npos, "factura A no muestra régimen de transparencia");
