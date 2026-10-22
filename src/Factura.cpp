@@ -3,17 +3,23 @@
 #include <string>
 using namespace std;
 
-Factura::Factura(Venta *v, int n, double t, string c) {
+Factura::Factura(Venta *v, int n, double t, string c, string cuit) {
     venta = v;
     numero = n;
     total = t;
     cae = c;
+    cuitCliente = cuit;
 }
 
 string Factura::armarTexto() {
     string texto = "";
     texto += "FACTURA " + string(1, getTipo()) + "\n";
+    texto += "Razon social: " + EMISOR_RAZON_SOCIAL + "\n";
+    texto += "CUIT emisor: " + EMISOR_CUIT + "\n";
     texto += "Numero: " + to_string(numero) + "\n";
+    if (getTipo() == 'A') {
+        texto += "CUIT cliente: " + cuitCliente + "\n";
+    }
 
     // 1. Mostrar ítems de la venta
     if (venta != NULL) {
@@ -42,6 +48,11 @@ string Factura::armarTexto() {
     string totalFormateado = to_string(centavosTotal / 100) + "." + decTotal;
 
     // Pie de la factura
+    // Factura A: discrimina neto e IVA (el total ya incluye IVA)
+    if (getTipo() == 'A' && venta != NULL) {
+        texto += "Precio neto: $" + formatearMonto(venta->calcularPrecioSinIVA()) + "\n";
+        texto += "IVA: $" + formatearMonto(venta->calcularIVAContenido()) + "\n";
+    }
     texto += "TOTAL: $" + totalFormateado + "\n";
     texto += "CAE: " + cae + "\n";
 
