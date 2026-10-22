@@ -25,8 +25,7 @@ void pantallaListar(Inventario& inv) {            // opcion 6
         if (guardarArrayProductos(inv, "listado_productos.txt")) cout << "Listado guardado en listado_productos.txt" << endl;
         else cout << "[ERROR] No se pudo crear listado_productos.txt" << endl;
     }
-    pausar();
-    limpiarPantalla();
+   
 }
  
 void pantallaBuscar(Inventario& inv) {            // opcion 7
