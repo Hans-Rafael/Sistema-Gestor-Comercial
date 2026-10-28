@@ -1,4 +1,4 @@
-// Autor: Integrante 5
+// Autor: Integrante 5.
 #include <iostream>
 #include <cstdlib>
 #include "Inventario.h"
